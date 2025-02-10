@@ -21,4 +21,4 @@ in the comments.
 ---
 
 ### Answers
-<img src="https://github.com/user-attachments/assets/af1a966d-6c7d-4b66-afe9-8f0b8cdbb214" width="300" alt="IMG_20250823_132037">
+<img src="https://i.imgur.com/2rjQQDs.jpeg" width="300" alt="IMG_20250823_132037">
