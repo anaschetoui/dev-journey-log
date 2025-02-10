@@ -315,30 +315,6 @@ Distinguished Bits:
 
 ---
 
-## Homework Assignment
-
-Answer the following questions:
-
-### Definition Questions
-1. What is a Bit?
-2. What is a Crumb?
-3. What is a Nibble?
-4. What is a Byte?
-
-### Quantity Questions
-5. How many bits are in one byte?
-6. How many crumbs are in one byte?
-7. How many nibbles are in one byte?
-8. How many crumbs are in one nibble?
-
-### Terminology Questions
-9. What does Lower Nibble mean?
-10. What does Upper Nibble mean?
-11. What does LSB mean and why is it called that? What value does it contain?
-12. What does MSB mean and why is it called that? What value does it contain?
-
----
-
 ## Quick Summary
 
 - **Bit**: Smallest unit (0 or 1)
