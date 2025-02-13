@@ -32,6 +32,19 @@
 
 #### 1- 
 
+Colums 1:
+
+<img src="https://i.imgur.com/svfm1iB.jpeg" width="300" alt="IMG_20250823_132037">
+
+<br><br>
+
+Colums 2: 
+
+<img src="https://i.imgur.com/hJqjbLe.jpeg" width="300" alt="IMG_20250823_132037">
+
+<img src="https://i.imgur.com/paAgF1y.jpeg" width="300" alt="IMG_20250823_132037">
+
+
 
 #### 2-
 
