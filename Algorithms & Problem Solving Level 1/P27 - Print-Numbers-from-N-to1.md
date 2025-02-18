@@ -1,4 +1,4 @@
-## Problem 26
+## Problem 27
 
 >### Wirte a program to print numbers from N to 1
 > Inputs <br>
@@ -23,9 +23,9 @@
 
 **Step 1:** Read N <br>
 **Step 2:**	Counter=N + 1<br>
-**Step 2:**	Counter=Counter - 1 <br>
-**Step 3:**	Print Num <br>
-**Step 4:**	Check if Counter = 0 is true then end Program otherwise  Counter= Counter-1 until it =1<br>
+**Step 3:**	Counter=Counter - 1 <br>
+**Step 4:**	Print Num <br>
+**Step 5:**	Check if Counter = 0 is true then end Program otherwise  Counter= Counter-1 until it =1<br>
 
 ### Flowchart
 
