@@ -23,9 +23,9 @@
 
 **Step 1:** Read N <br>
 **Step 2:**	Num=0 <br>
-**Step 2:**	Num=Num +1 <br>
-**Step 3:**	Print Num <br>
-**Step 4:**	Check if Num = N true  then end program otherwise  Num= Num+1 until = N<br>
+**Step 3:**	Num=Num +1 <br>
+**Step 4:**	Print Num <br>
+**Step 5:**	Check if Num = N true  then end program otherwise  Num= Num+1 until = N<br>
 
 ### Flowchart
 
