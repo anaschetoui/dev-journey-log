@@ -133,11 +133,11 @@ cout << "النص المراد طباعته";
 using namespace std;
 
 int main() {
-    cout << "محمد أبو هدهود";
+    cout << "Mohammed Abu-Hadhoud";
     return 0;
 }
 ```
-**الناتج:** محمد أبو هدهود
+**الناتج:** Mohammed Abu-Hadhoud
 </div>
 
 <div dir="rtl" style="text-align: right;">
@@ -186,34 +186,6 @@ int main() {
 </div>
 
 <div dir="rtl" style="text-align: right;">
-
----
-
-## هيكل المشروع في Visual Studio
-
-### تنظيم الملفات
-
-</div>
-
-<div dir="ltr" style="text-align: left; background-color: #fff3cd; padding: 15px; border-radius: 5px; margin: 10px 0;">
-
-```
-Solution Explorer:
-├── Project Name
-│   ├── Source Files
-│   │   └── main.cpp
-│   └── Header Files
-```
-
-</div>
-
-<div dir="rtl" style="text-align: right;">
-
-### نصائح للعمل مع IDE
-
-- **حفظ الحل**: Save Solution بشكل دوري
-- **إدارة الملفات**: معرفة موقع الملفات في Solution Explorer
-- **الترميز**: استخدام ترميز مناسب للنصوص العربية
 
 ---
 
@@ -377,11 +349,11 @@ cout << "Text to print";
 using namespace std;
 
 int main() {
-    cout << "Mohammed Abo Haddoud";
+    cout << "Mohammed Abu-Hadhoud";
     return 0;
 }
 ```
-**Output:** Mohammed Abo Haddoud
+**Output:** Mohammed Abu-Hadhoud
 </div>
 
 <div dir="rtl" style="text-align: right;">
@@ -433,33 +405,6 @@ int main() {
 
 ---
 
-## Project Structure in Visual Studio
-
-### File Organization
-
-</div>
-
-<div dir="ltr" style="text-align: left; background-color: #fff3cd; padding: 15px; border-radius: 5px; margin: 10px 0;">
-
-```
-Solution Explorer:
-├── Project Name
-│   ├── Source Files
-│   │   └── main.cpp
-│   └── Header Files
-```
-
-</div>
-
-<div dir="rtl" style="text-align: right;">
-
-### IDE Working Tips
-
-- **Save Solution**: Save periodically
-- **File Management**: Know file locations in Solution Explorer
-- **Encoding**: Use appropriate encoding for Arabic text
-
----
 
 ## Summary
 
