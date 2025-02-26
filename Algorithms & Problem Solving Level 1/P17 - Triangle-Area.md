@@ -15,7 +15,7 @@
 
 ### Steps
 **Step 1:** Read a,h<br>
-**Step 2:** Area = a/2*h<br>
+**Step 2:** Area = a*2/h<br>
 **Step 3:** Print Area<br>
 
 ### Flowchart 

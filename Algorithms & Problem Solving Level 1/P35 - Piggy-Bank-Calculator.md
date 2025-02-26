@@ -22,7 +22,7 @@ flowchart TD
 S([start])
 E([end])
 R[/Read Penny,Nickel,Dime,Quarter,Dollar/]
-TPD[TotalPennies = Pennies * 1 + Nickles * 5 + Dimes * 10 + Quarters * 25 Dollars * 100 <br> TotalDollars = Piennies / 100]
+TPD[TotalPennies = Pennies * 1 + Nickles * 5 + Dimes * 10 + Quarters * 25 + Dollars * 100 <br> TotalDollars = Piennies / 100]
 P[/Print TotalPennies <br> Print TotalDollars/]
 S-->R-->TPD-->P-->E
 
