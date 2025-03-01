@@ -12,7 +12,7 @@
 
 **Step 1:** Ask the user to enter r<br>
 **Step 2:** PI=3.14 <br>
-**Step 3:** Area= 3.14 * (r*r)<br>
+**Step 3:** Area= PI * (r*r)<br>
 **Step 4:** Print Area <br>
 
 ### Flowchart
