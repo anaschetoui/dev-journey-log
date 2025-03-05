@@ -1,0 +1,16 @@
+// Problem #27 -> Algorithms & Problem Solving Level 1
+
+#include <iostream>
+using namespace std;
+
+int main()
+{
+	for (int i = 10; i >= 1; i--)
+	{
+		cout << i << endl;
+
+	}
+
+
+	return 0;
+}
