@@ -5,7 +5,7 @@
 > 10<br>
 > <br>
 > Output -> <br>
-> 20<br>
+> 25<br>
 
 ### Steps
 
