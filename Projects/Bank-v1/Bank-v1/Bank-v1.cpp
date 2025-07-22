@@ -132,11 +132,20 @@ void PrintClientList()
 	cout << "--------------------------------------------------------------------------------------------------\n";
 }
 
-stClients ReadNewClient(string AccountNumber,string Message = "Enter the details of the new client you want to add: ")
+stClients ReadNewClient( vector <stClients> vClients,string Message = "Enter the details of the new client you want to add: ")
 {
 	stClients NewClient;
+
 	cout << "Enter the Account Number: ";
 	getline(cin >> ws, NewClient.AccountNumber);
+		for (stClients client : vClients)
+		{
+			while (NewClient.AccountNumber == client.AccountNumber)
+			{
+				cout << "This Account Number already exist, Enter anorher one: ";
+				getline(cin, NewClient.AccountNumber);
+			}
+		}	
 	cout << "Enter the PIN Code: ";
 	getline(cin, NewClient.PIN_Code);
 	cout << "Enter Full Name: ";
@@ -149,32 +158,76 @@ stClients ReadNewClient(string AccountNumber,string Message = "Enter the details
 	return NewClient;
 }
 
-vector <stClients> SaveNewClientToFile(string Filename=ClientsFile)
+string ClientsToLine(stClients Clients, string Seperator = "#//#")
 {
+	return Clients.AccountNumber + Seperator + Clients.PIN_Code +
+		Seperator + Clients.Name + Seperator + Clients.Phone + Seperator +
+		to_string(Clients.Balance);
+}
+
+void SaveNewClientToFile(stClients NewClient, string Filename = ClientsFile)
+{
+	fstream MyFile;
+	MyFile.open(Filename, ios::app);
 	
+	if (MyFile.is_open())
+	{
+		string NewLine = ClientsToLine(NewClient);
+		MyFile << NewLine << endl;
+
+		MyFile.close();
+	}
+
 }
 
 void PrintAddingNewAccount()
 {
 	char Answer = 'n';
-	
+	vector <stClients> vClient = LoadDataFromFile();
 	do{
 		system("CLS");
 		cout << "----------------------------\n";
 		cout << "\tAdd New Client\n";
 		cout << "----------------------------\n";
-		stClients NewClients = ReadNewClient("4545");
-		
 
+		stClients NewClient = ReadNewClient(vClient);
+
+		SaveNewClientToFile(NewClient);
+		vClient;
 		cout << "\nClient Added Successfully, do you want to add more (Y/N): ";
 		cin >> Answer;
 	} while (Answer == 'y' || Answer == 'Y');
+}
 
+string ReadAccountNumber(string Message = "Enter The Account Number: ")
+{
+	string AccountNumber = "";
+	cout << Message;
+	getline(cin>>ws, AccountNumber);
+	return AccountNumber;
+}
+
+vector <stClients> DeleteOrUpdateClientFromFile(string Filename = ClientsFile)
+{
+	vector <stClients> vClients;
+	//I will continue next time
+	return vClients;
+}
+
+void PrintDeleteClient()
+{
+	
+	system("CLS");
+	cout << "----------------------------\n";
+	cout << "\tDelete Client\n";
+	cout << "----------------------------\n";
+	string AccountNumber = ReadAccountNumber();
 
 }
 
 void StartMainMenu()
 {
+	 
     int Option=0;
     do
     {
@@ -191,7 +244,7 @@ void StartMainMenu()
             system("pause");
             break;
         case enOption::OptionTree:
-            // DeleteClient();
+			PrintDeleteClient();
             system("pause");
             break;
         case enOption::OptionFour:
@@ -203,15 +256,18 @@ void StartMainMenu()
             system("pause");
             break;
         case enOption::OptionSix:
-            cout << "Exiting...\n";
             break;
         default:
-            cout << "Invalid option. Please try again.\n";
+			cout << "is a Wrong Choice choose 1-6.\n";
             system("pause");
             break;
         }
         system("cls");
     } while (Option != enOption::OptionSix);
+	system("CLS");
+	cout << "----------------------------\n";
+	cout << "\tProgram ended\n";
+	cout << "----------------------------\n";
 }
 int main()
 {
