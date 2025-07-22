@@ -1,4 +1,4 @@
-# 🚀 My Programming Journey: From Algorithms to Backend
+# 🚀 My Programming Journey: From Zero to Backend
 
 Welcome to my personal journey as a self-taught developer.  
 This repository documents every step I take from solving algorithms in C++ to building full backend applications in C# and SQL.
