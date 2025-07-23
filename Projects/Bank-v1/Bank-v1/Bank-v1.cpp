@@ -4,9 +4,7 @@
 #include <vector>
 #include <fstream>
 
-using namespace std;
-
-const string ClientsFile = "ClientsFile.txt";
+const std::string ClientsFile = "ClientsFile.txt";
 
 enum enOption{
 	OptionOne = 1, OptionTwo = 2, OptionTree = 3, OptionFour = 4, OptionFive = 5, OptionSix = 6
@@ -14,60 +12,60 @@ enum enOption{
 
 struct stClients
 {
-	string AccountNumber;
-	string PIN_Code;
-	string Name;
-	string Phone;
+	std::string AccountNumber;
+	std::string PIN_Code;
+	std::string Name;
+	std::string Phone;
 	double Balance = 0.00;
 	bool MarkAtClient = false;
 };
 
 void HeaderShowClientScreen()
 {
-	cout << "--------------------------------------------------------------------------------------------------\n";
-	cout << "|" << left << setw(16) << "Acount Number"
-		<< "|" << left << setw(10) << "PIN Code"
-		<< "|" << left << setw(30) << "Name"
-		<< "|" << left << setw(20) << "Phone"
-		<< "|" << left << setw(16) << "Balance"
-		<< "|" << left << endl;
-	cout << "--------------------------------------------------------------------------------------------------\n";
+	std::cout << "--------------------------------------------------------------------------------------------------\n";
+	std::cout << "|" << std::left << std::setw(16) << "Acount Number"
+		<< "|" << std::left << std::setw(10) << "PIN Code"
+		<< "|" << std::left << std::setw(30) << "Name"
+		<< "|" << std::left << std::setw(20) << "Phone"
+		<< "|" << std::left << std::setw(16) << "Balance"
+		<< "|" << std::left << std::endl;
+	std::cout << "--------------------------------------------------------------------------------------------------\n";
 }
 
 void ShowClientListScreen(stClients Client)
 {
-   cout << "|" << left << setw(16) << Client.AccountNumber
-		<< "|" << left << setw(10) << Client.PIN_Code
-		<< "|" << left << setw(30) << Client.Name
-		<< "|" << left << setw(20) << Client.Phone
-		<< "|" << left << setw(16) << Client.Balance
-		<< "|" << left << endl;
-	
+   std::cout << "|" << std::left << std::setw(16) << Client.AccountNumber
+		<< "|" << std::left << std::setw(10) << Client.PIN_Code
+		<< "|" << std::left << std::setw(30) << Client.Name
+		<< "|" << std::left << std::setw(20) << Client.Phone
+		<< "|" << std::left << std::setw(16) << Client.Balance
+		<< "|" << std::left << std::endl;
+						  
 }
 
 void MainMenuScreen()
 {
-	cout << "=====================================\n";
-	cout << "\t  Main Menu Screen\n";
-	cout << "=====================================\n";
-	cout << "\t[1] Show Client List\n";
-	cout << "\t[2] AddNewClient\n";
-	cout << "\t[3] Delete Client\n";
-	cout << "\t[4] Update Client Info\n";
-	cout << "\t[5] Find Client\n";
-	cout << "\t[6] Exit\n";
-	cout << "=====================================\n";
-	cout << "Choose what you want to do [1-6]: ";
+	std::cout << "=====================================\n";
+	std::cout << "\t  Main Menu Screen\n";
+	std::cout << "=====================================\n";
+	std::cout << "\t[1] Show Client List\n";
+	std::cout << "\t[2] AddNewClient\n";
+	std::cout << "\t[3] Delete Client\n";
+	std::cout << "\t[4] Update Client Info\n";
+	std::cout << "\t[5] Find Client\n";
+	std::cout << "\t[6] Exit\n";
+	std::cout << "=====================================\n";
+	std::cout << "Choose what you want to do [1-6]: ";
 	
 }
 
-vector <string>SplitLine(string Line, string Seperator = "#//#")
+std::vector <std::string>SplitLine(std::string Line, std::string Seperator = "#//#")
 {
-	vector <string> vSplit;
-	string word = "";
+	std::vector <std::string> vSplit;
+	std::string word = "";
 	short pos = 0;
 
-	while ((pos = Line.find(Seperator)) != string::npos)
+	while ((pos = Line.find(Seperator)) != std::string::npos)
 	{
 		
 		word = Line.substr(0, pos);
@@ -84,7 +82,7 @@ vector <string>SplitLine(string Line, string Seperator = "#//#")
 	return vSplit;
 }
 
-stClients RecordToLine(vector <string>vSplitString)
+stClients RecordToLine(std::vector <std::string>vSplitString)
 {
 	stClients Client;
 
@@ -92,20 +90,20 @@ stClients RecordToLine(vector <string>vSplitString)
 	Client.PIN_Code = vSplitString[1];
 	Client.Name = vSplitString[2];
 	Client.Phone = vSplitString[3];
-	Client.Balance = stod(vSplitString[4]);
+	Client.Balance = std::stod(vSplitString[4]);
 
 	return Client;
 }
 
-vector <stClients> LoadDataFromFile(string  Filename = ClientsFile)
+std::vector <stClients> LoadDataFromFile(std::string  Filename = ClientsFile)
 {
-	vector <stClients> vClients;
-	fstream MyFile;
-	MyFile.open(Filename, ios::in);
+	std::vector <stClients> vClients;
+	std::fstream MyFile;
+	MyFile.open(Filename, std::ios::in);
 
 	if (MyFile.is_open())
 	{
-		string Line;
+		std::string Line;
 		stClients client;
 
 		while (getline(MyFile, Line))
@@ -120,60 +118,60 @@ vector <stClients> LoadDataFromFile(string  Filename = ClientsFile)
 
 void PrintClientList()
 {
-	vector <stClients> vClients = LoadDataFromFile();
+	std::vector <stClients> vClients = LoadDataFromFile();
 	system("cls");
-	cout << "\t\t\t\t\tClient[" << vClients.size() << "] \n";
+	std::cout << "\t\t\t\t\tClient[" << vClients.size() << "] \n";
 	HeaderShowClientScreen();
 	for (stClients client : vClients)
 	{
 		ShowClientListScreen(client);
 
 	}
-	cout << "--------------------------------------------------------------------------------------------------\n";
+	std::cout << "--------------------------------------------------------------------------------------------------\n";
 }
 
-stClients ReadNewClient( vector <stClients> vClients,string Message = "Enter the details of the new client you want to add: ")
+stClients ReadNewClient(std::vector <stClients> vClients, std::string Message = "Enter the details of the new client you want to add: ")
 {
 	stClients NewClient;
 
-	cout << "Enter the Account Number: ";
-	getline(cin >> ws, NewClient.AccountNumber);
+	std::cout << "Enter the Account Number: ";
+	getline(std::cin >> std::ws, NewClient.AccountNumber);
 		for (stClients client : vClients)
 		{
 			while (NewClient.AccountNumber == client.AccountNumber)
 			{
-				cout << "This Account Number already exist, Enter anorher one: ";
-				getline(cin, NewClient.AccountNumber);
+				std::cout << "This Account Number already exist, Enter anorher one: ";
+				getline(std::cin, NewClient.AccountNumber);
 			}
 		}	
-	cout << "Enter the PIN Code: ";
-	getline(cin, NewClient.PIN_Code);
-	cout << "Enter Full Name: ";
-	getline(cin, NewClient.Name);
-	cout << "Enter Phone Number: ";
-	getline(cin, NewClient.Phone);
-	cout << "Enter Account Balance: ";
-	cin >> NewClient.Balance;
+		std::cout << "Enter the PIN Code: ";
+	getline(std::cin, NewClient.PIN_Code);
+	std::cout << "Enter Full Name: ";
+	getline(std::cin, NewClient.Name);
+	std::cout << "Enter Phone Number: ";
+	getline(std::cin, NewClient.Phone);
+	std::cout << "Enter Account Balance: ";
+	std::cin >> NewClient.Balance;
 
 	return NewClient;
 }
 
-string ClientsToLine(stClients Clients, string Seperator = "#//#")
+std::string JoinClientsInLine(stClients Clients, std::string Seperator = "#//#")
 {
 	return Clients.AccountNumber + Seperator + Clients.PIN_Code +
 		Seperator + Clients.Name + Seperator + Clients.Phone + Seperator +
-		to_string(Clients.Balance);
+		std::to_string(Clients.Balance);
 }
 
-void SaveNewClientToFile(stClients NewClient, string Filename = ClientsFile)
+void SaveNewClientToFile(stClients NewClient, std::string Filename = ClientsFile)
 {
-	fstream MyFile;
-	MyFile.open(Filename, ios::app);
+	std::fstream MyFile;
+	MyFile.open(Filename, std::ios::app);
 	
 	if (MyFile.is_open())
 	{
-		string NewLine = ClientsToLine(NewClient);
-		MyFile << NewLine << endl;
+		std::string NewLine = JoinClientsInLine(NewClient);
+		MyFile << NewLine << std::endl;
 
 		MyFile.close();
 	}
@@ -183,47 +181,208 @@ void SaveNewClientToFile(stClients NewClient, string Filename = ClientsFile)
 void PrintAddingNewAccount()
 {
 	char Answer = 'n';
-	vector <stClients> vClient = LoadDataFromFile();
+	std::vector <stClients> vClient = LoadDataFromFile();
 	do{
 		system("CLS");
-		cout << "----------------------------\n";
-		cout << "\tAdd New Client\n";
-		cout << "----------------------------\n";
+		std::cout << "----------------------------\n";
+		std::cout << "\tAdd New Client\n";
+		std::cout << "----------------------------\n";
 
 		stClients NewClient = ReadNewClient(vClient);
 
 		SaveNewClientToFile(NewClient);
 		vClient;
-		cout << "\nClient Added Successfully, do you want to add more (Y/N): ";
-		cin >> Answer;
+		std::cout << "\nClient Added Successfully, do you want to add more (Y/N): ";
+		std::cin >> Answer;
 	} while (Answer == 'y' || Answer == 'Y');
 }
 
-string ReadAccountNumber(string Message = "Enter The Account Number: ")
+std::string ReadAccountNumber(std::string Message = "Enter The Account Number: ")
 {
-	string AccountNumber = "";
-	cout << Message;
-	getline(cin>>ws, AccountNumber);
+	std::string AccountNumber = "";
+	std::cout << Message;
+	getline(std::cin>> std::ws, AccountNumber);
 	return AccountNumber;
 }
 
-vector <stClients> DeleteOrUpdateClientFromFile(string Filename = ClientsFile)
+bool FindClientByAccountNumber(std::vector <stClients>vClients, stClients& Client, std::string AccountNumber)
 {
-	vector <stClients> vClients;
-	//I will continue next time
+	for (stClients& C : vClients)
+	{
+		if (C.AccountNumber == AccountNumber)
+		{
+			Client = C;
+			return true;
+			break;
+		}
+	}
+	return false;
+}
+
+bool MarkToClient(std::vector <stClients> &vClients, std::string AccountNumber)
+{
+	for (stClients &C : vClients)
+	{
+		if (C.AccountNumber == AccountNumber)
+		{
+			C.MarkAtClient = true;
+			return true;
+			break;
+		}
+	}
+	return false;
+}
+
+std::vector <stClients> DeleteClientFromFile(std::vector <stClients> vClients, std::string Filename = ClientsFile)
+{
+	std::fstream MyFile;
+	MyFile.open(Filename, std::ios::out); //overwrite
+	std::string Line = "";
+	if (MyFile.is_open())
+	{		
+		for(stClients Client : vClients)
+		{
+			if (Client.MarkAtClient == false)
+			{
+				Line = JoinClientsInLine(Client);
+				MyFile << Line << std::endl;
+			}
+			
+		}
+		MyFile.close();
+	}
+
 	return vClients;
 }
 
-void PrintDeleteClient()
+void PrintClientCard(stClients Client)
 {
-	
+	std::cout <<   "Account Number : " << Client.AccountNumber;
+	std::cout << "\nPIN Code       : " << Client.PIN_Code;
+	std::cout << "\nFull Name      : " << Client.Name;
+	std::cout << "\nPhone Number   : " << Client.Phone;
+	std::cout << "\nAccount Balance: " << Client.AccountNumber;
+	std::cout<<std::endl;
+}
+
+void PrintDeletingClientScreen()
+{
+	std::vector <stClients> vClients=LoadDataFromFile();
+	stClients Client;
+	char Answer = 'n';
 	system("CLS");
-	cout << "----------------------------\n";
-	cout << "\tDelete Client\n";
-	cout << "----------------------------\n";
-	string AccountNumber = ReadAccountNumber();
+	std::cout << "----------------------------\n";
+	std::cout << "\tDelete Client\n";
+	std::cout << "----------------------------\n";
+	std::string AccountNumber = ReadAccountNumber();
+	if (FindClientByAccountNumber(vClients, Client, AccountNumber))
+	{
+		PrintClientCard(Client);
+
+		std::cout << "\nAre you really sure you want to delete this client (Y/N): ";
+		std::cin >> Answer;
+		if (Answer == 'Y' || Answer == 'y')
+		{
+
+			MarkToClient(vClients, AccountNumber);
+			DeleteClientFromFile(vClients);
+			vClients = LoadDataFromFile();//this for refrech new data
+			std::cout << "Account Deleted successfully.\n";
+		}
+	}
+	else
+	{
+		std::cout << "Account [" << AccountNumber << "] Not Founded.\n";
+		
+	}
 
 }
+
+std::vector <stClients> UpdateClientInFile(std::vector<stClients> &vClients, std::string AccountNumber)
+{
+	std::fstream MyFile;
+	stClients NewClient = ReadNewClient(vClients);
+	MyFile.open(ClientsFile, std::ios::out);
+	std::string Line="";
+	if (MyFile.is_open())
+	{
+		for (stClients& Client : vClients)
+		{
+			if (Client.MarkAtClient == true)
+			{
+				Line = JoinClientsInLine(NewClient);
+				MyFile << Line << std::endl;
+			}
+			else
+			{
+				Line = JoinClientsInLine(Client);
+				MyFile << Line << std::endl;
+			}
+		}
+		MyFile.close();
+
+	}
+
+
+	return vClients;
+
+}
+
+void PrintUpdatedClient()
+{
+	std::vector <stClients>vClients = LoadDataFromFile();
+	stClients Client;
+	system("CLS");
+	std::cout << "----------------------------\n";
+	std::cout << "\tUpdate Client\n";
+	std::cout << "----------------------------\n";
+	std::string AccountNumber=ReadAccountNumber();
+	char Answer = 'n';
+	if (FindClientByAccountNumber(vClients, Client, AccountNumber))
+	{
+		PrintClientCard(Client);
+		std::cout << "\nAre you really sure do you want to edit this client (Y/N): ";
+		std::cin >> Answer;
+		if (Answer == 'Y' || Answer == 'y')
+		{
+			MarkToClient(vClients, AccountNumber);
+			UpdateClientInFile(vClients, AccountNumber);
+			vClients = LoadDataFromFile(); //this for refrech new data;
+			std::cout << "Update Account successfully.\n";
+		}
+	}
+	else
+	{
+		std::cout << "Account [" << AccountNumber << "] Not Founded.\n";
+
+	}
+}
+
+void PrintFindClient()
+{
+	std::vector <stClients>vClients = LoadDataFromFile();
+	stClients Client;
+	system("CLS");
+	std::cout << "----------------------------\n";
+	std::cout << "\tFind Client\n";
+	std::cout << "----------------------------\n";
+	std::string AccountNumber = ReadAccountNumber();
+	if (FindClientByAccountNumber(vClients, Client, AccountNumber))
+	{
+		system("CLS");
+		std::cout << "----------------------------\n";
+		std::cout << "\tFind Client\n";
+		std::cout << "----------------------------\n";
+		PrintClientCard(Client);
+
+	}
+	else
+	{
+		std::cout << "Account [" << AccountNumber << "] Not Founded.\n";
+	}
+
+}
+
 
 void StartMainMenu()
 {
@@ -232,7 +391,7 @@ void StartMainMenu()
     do
     {
         MainMenuScreen();
-        cin >> Option;
+		std::cin >> Option;
         switch (Option)
         {
         case enOption::OptionOne:
@@ -244,30 +403,31 @@ void StartMainMenu()
             system("pause");
             break;
         case enOption::OptionTree:
-			PrintDeleteClient();
+			PrintDeletingClientScreen();
             system("pause");
             break;
         case enOption::OptionFour:
-            // UpdateClientInfo();
+			PrintUpdatedClient();
             system("pause");
             break;
         case enOption::OptionFive:
-            // FindClient();
+			PrintFindClient();
             system("pause");
             break;
         case enOption::OptionSix:
+			std::cout << "Exiting....";
             break;
         default:
-			cout << "is a Wrong Choice choose 1-6.\n";
+			std::cout << "is a Wrong Choice choose 1-6.\n";
             system("pause");
             break;
         }
         system("cls");
     } while (Option != enOption::OptionSix);
 	system("CLS");
-	cout << "----------------------------\n";
-	cout << "\tProgram ended\n";
-	cout << "----------------------------\n";
+	std::cout << "----------------------------\n";
+	std::cout << "\tProgram ended\n";
+	std::cout << "----------------------------\n";
 }
 int main()
 {
