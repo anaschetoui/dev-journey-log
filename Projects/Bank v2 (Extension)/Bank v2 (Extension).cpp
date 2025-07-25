@@ -21,6 +21,8 @@ struct stClients
 
 void HeaderPart(std::string HeaderType)
 {
+	system("cls");
+
 	std::cout << "================================\n";
 	std::cout << "\t   " << HeaderType << "\n";
 	std::cout << "================================\n";
@@ -37,17 +39,21 @@ enum enMenuOptions
 enMenuOptions ReadOptions(std::string Message = "Choose an option (1-7): ")
 {
 	short Options = 0;
-	std::cout << Message;
-	std::cin >> Options;
-	while (std::cin.fail())
-	{
+	do{
 		system("ClS");    // Clear the screen 
-        MainMenuScreen();// and show the main menu again for better formatting
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		std::cout << "Invalid Number ,Please enter a valid number: ";
+		MainMenuScreen();// and show the main menu again for better formatting
+		std::cout << Message;
 		std::cin >> Options;
-	}
+		while (std::cin.fail())
+		{
+			system("ClS");    // Clear the screen 
+			MainMenuScreen();// and show the main menu again for better formatting
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cout << "Invalid Number ,Please enter a valid number: ";
+			std::cin >> Options;
+		}
+	} while (Options <= 0 || Options >7);
 	return (enMenuOptions)Options;
 
 }
@@ -65,16 +71,70 @@ void MainMenuScreen()
     std::cout << "================================\n";	
 }
 
+std::vector <std::string> vSplitString(std::string Line, std::string Seperator = "#//#")
+{
+
+}
+
+void PrintShowAllClients()
+{
+	
+	HeaderPart("Show Clients");
+
+}
 
 
 void StartMenu()
 {
-	MainMenuScreen();
-	enMenuOptions MenuOption = ReadOptions();
+	enMenuOptions MenuOption; 
+	do {
+		MainMenuScreen();
+		MenuOption = ReadOptions();
 
+		switch (MenuOption)
+		{
+		case enMenuOptions::eShowClients:
+			PrintShowAllClients();
+			system("pause");
+			break;
+		case enMenuOptions::eAddNewClient:
+			//AddNewClient()
+			system("ClS");
+			std::cout << "This Option Just for test will be available.\n";
+			system("pause");
+			break;
+		case enMenuOptions::eDeleteClient:
+			//DeleteClient()
+			system("ClS");
+			std::cout << "This Option Just for test will be available.\n";
+			system("pause");
+		case enMenuOptions::eUpdateClient:
+            //UpdateClient()
+            system("ClS");
+            std::cout << "This Option Just for test will be available.\n";
+            system("pause");
+            break;
+		case enMenuOptions::eFindClient:
+            //FindClient()
+            system("ClS");
+            std::cout << "This Option Just for test will be available.\n";
+            system("pause");
+            break;
+		case enMenuOptions::eTransactions:
+            //Transactions()
+            system("ClS");
+            std::cout << "This Option Just for test will be available.\n";
+            system("pause");
+			break;
+        }
+	} while (MenuOption != enMenuOptions::eExit);
+            HeaderPart("Program Ended");
+    
 }
 
 int main()
 {
 	StartMenu();
+
+	return 0;
 }
