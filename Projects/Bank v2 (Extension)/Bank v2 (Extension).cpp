@@ -8,6 +8,8 @@
 const std::string ClientFile = "ClientFile.txt";
 
 void MainMenuScreen();
+void StartMenu();
+void TransactionsMenuScreen();
 
 struct stClients
 {
@@ -24,7 +26,7 @@ void HeaderPart(std::string HeaderType)
 	system("cls");
 
 	std::cout << "================================\n";
-	std::cout << "\t   " << HeaderType << "\n";
+	std::cout << "\t  " << HeaderType << "\n";
 	std::cout << "================================\n";
 }
 
@@ -338,7 +340,7 @@ void PrintDeleteClientScreen()
 		if (Answer == 'y' || Answer == 'Y')
 		{
 			MarktoClient(vClients, AccountNumber);
-			SaveDataToFile(vClients);
+			SaveDataToFile(vClients,ClientFile);
 			vClients = LoadDataFromFile(); 
 
 			std::cout << "Client deleted succussfully.\n";
@@ -405,6 +407,126 @@ void PrintUpdateClientScreen()
 
 }
 
+enum enTransactionsOptions
+{
+	eDeposit = 1, Withdraw = 2,
+	eTototalBalances = 3, MainMenu = 4
+};
+
+enTransactionsOptions eReadTransactionsOptions(std::string Message = "Choose an option (1-4): ")
+{
+	short Options = 0;
+	do {
+		system("ClS");   
+		TransactionsMenuScreen();
+		std::cout << Message;
+		std::cin >> Options;
+		while (std::cin.fail())
+		{
+			system("ClS");   
+			TransactionsMenuScreen();
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cout << "Invalid Number ,Please enter a valid number: ";
+			std::cin >> Options;
+		}
+	} while (Options <= 0 || Options > 4);
+	return (enTransactionsOptions)Options;
+}
+
+void TransactionsMenuScreen()
+{
+	HeaderPart("Transactions Menu");
+	std::cout << "\t[1] Deposit.\n";
+	std::cout << "\t[2] Withdraw.\n";
+	std::cout << "\t[3] Total Balances.\n";
+	std::cout << "\t[4] Main Menu.\n";	
+	std::cout << "================================\n";
+
+}
+
+double ReadDepositWithdrawNumber(std::string Message = "Please Enter Deposit Amount: ")
+{
+	double DepositAmount = 0.00;
+	std::cout << Message;
+	std::cin >> DepositAmount;
+	return DepositAmount;
+}
+
+bool Deposit(std::vector <stClients>& vClients, double DepositAmount,std::string AccountNumber)
+{
+	for (stClients& Client : vClients)
+	{
+		if (Client.AccountNumber == AccountNumber)
+		{
+			
+			Client.Balance =Client.Balance + DepositAmount;
+			return true;
+
+		}
+
+	}
+	return false;
+}
+void SaveDataToFile_DepositWithdraw(std::vector <stClients> vClient,std::string Filename = ClientFile ,bool Deposit=false)
+{
+	std::fstream MyFiile;
+		//to be continued
+}
+
+void PrintDepositScreenMenu()
+{
+	stClients Client;
+	std::vector <stClients> vClients = LoadDataFromFile();
+	HeaderPart("Deposit Menu");
+	std::string AccountNumber = ReadAccountNumber();
+	char Answer = 'n';
+	if (FindClientByAccountNumber(vClients,Client,AccountNumber))
+	{
+		PrintClientCard(Client);
+		double DepositAmount = ReadDepositWithdrawNumber();
+		std::cout << "Are you sure you want to add this transactions (Y/N): ";
+		std::cin >> Answer;
+		if (Answer == 'Y' || Answer == 'y')
+		{
+			//to be continued
+		}
+	}
+	else
+	{
+		
+        std::cout << "Account number not found.\n";
+	}
+}
+
+void PrintTransactions()
+{
+	
+	enTransactionsOptions eTransactionOptions;
+	do
+	{
+		TransactionsMenuScreen();
+		eTransactionOptions = eReadTransactionsOptions();
+
+		switch (eTransactionOptions)
+		{
+		case enTransactionsOptions::eDeposit:
+			 PrintDepositScreenMenu();
+			 system("pause");
+			 break;
+		case enTransactionsOptions::Withdraw:
+			//PrintWithderawScreenMenu()
+			 system("pause");
+			 break;
+		case enTransactionsOptions::eTototalBalances:
+			 //PrintTotalBalancesScreenMenu()
+			system("pause");
+			break;
+		}
+	} while (eTransactionOptions != enTransactionsOptions::MainMenu);
+	StartMenu();
+}
+
 void StartMenu()
 {
 	enMenuOptions MenuOption; 
@@ -435,9 +557,7 @@ void StartMenu()
             system("pause");
             break;
 		case enMenuOptions::eTransactions:
-            //Transactions()
-            system("ClS");
-            std::cout << "This Option Just for test will be available.\n";
+			PrintTransactions();
             system("pause");
 			break;
         }
