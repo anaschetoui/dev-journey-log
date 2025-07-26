@@ -368,31 +368,6 @@ void PrintFindClientScreen()
 	}
 }
 
-void UpdateDataInFile(std::vector <stClients> vClients,stClients NewClient, std::string Filename = ClientFile)
-{
-	std::fstream MyFile;
-	MyFile.open(Filename, std::ios::out);
-	std::string Line;
-
-	if (MyFile.is_open())
-	{
-		for (stClients Client : vClients)
-		{
-			if (Client.MarktoClient == true)
-			{
-				Line = ConvertRecordToLine(NewClient);
-				MyFile << Line << std::endl;
-			}
-			else
-			{
-				Line = ConvertRecordToLine(Client);
-				MyFile << Line << std::endl;
-			}
-
-		}
-		MyFile.close();
-	}
-}
 
 void PrintUpdateClientScreen()
 {
