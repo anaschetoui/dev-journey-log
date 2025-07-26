@@ -73,13 +73,96 @@ void MainMenuScreen()
 
 std::vector <std::string> vSplitString(std::string Line, std::string Seperator = "#//#")
 {
+	std::vector <std::string> vString;
+	short pos = 0;
+	std::string word = "";
 
+	while ((pos = Line.find(Seperator)) != std::string::npos)
+	{
+		word = Line.substr(0, pos);
+		if (!word.empty())
+		{
+			vString.push_back(word);
+		}
+		Line.erase(0, pos + Seperator.length());
+	}
+	if (!Line.empty())
+	{
+		vString.push_back(Line);
+	}
+	return vString;
 }
+
+stClients ConvertLineToRecord(std::vector <std::string> vString)
+{
+	stClients Client;
+  
+    Client.AccountNumber = vString[0];
+    Client.PIN_Code = vString[1];
+    Client.Name = vString[2];
+    Client.Phone = vString[3];
+    Client.Balance = std::stod(vString[4]);
+    return Client;
+}
+
+std::vector <stClients> LoadDataFromFile(std::string FileName = ClientFile)
+{
+	std::fstream MyFile;
+	std::vector <stClients> vClients;
+	
+	MyFile.open(FileName, std::ios::in);
+
+	if (MyFile.is_open())
+	{
+		stClients Client;
+		std::string Line = "";
+		while (getline(MyFile, Line))
+		{
+			Client = ConvertLineToRecord(vSplitString(Line));
+			vClients.push_back(Client);
+		}
+		MyFile.close();
+	}
+	return vClients;
+}
+
+void ShowClientHeader()
+{
+    std::cout << std::string(88, '-') << "\n";
+	std::cout
+		<< "| " << std::left << std::setw(15) << "Account Number"
+		<< "| " << std::setw(10) << "PIN Code"
+		<< "| " << std::setw(25) << "Client Name"
+		<< "| " << std::setw(15) << "Phone"
+		<< "| " << std::setw(12) << "Balance"
+		<< "|\n";
+    std::cout << std::string(88, '-') << "\n";
+}
+void PrintClientCard(stClients Client)
+{
+	
+	std::cout
+		<< "| " << std::left << std::setw(15) << Client.AccountNumber
+		<< "| " << std::setw(10) << Client.PIN_Code
+		<< "| " << std::setw(25) << Client.Name
+		<< "| " << std::setw(15) << Client.Phone
+		<< "| " << std::setw(12) << Client.Balance
+		<< "|\n";
+}
+
 
 void PrintShowAllClients()
 {
-	
-	HeaderPart("Show Clients");
+	system("CLS");
+	std::vector<stClients> vClients = LoadDataFromFile();
+	std::cout << "\t\t\t\t[" << vClients.size() << "] Client(s)\n";
+	ShowClientHeader();
+	for (stClients Client : vClients)
+	{
+		PrintClientCard(Client);
+	}
+
+	std::cout << std::string(88, '-') << "\n";
 
 }
 
@@ -98,9 +181,7 @@ void StartMenu()
 			system("pause");
 			break;
 		case enMenuOptions::eAddNewClient:
-			//AddNewClient()
-			system("ClS");
-			std::cout << "This Option Just for test will be available.\n";
+			
 			system("pause");
 			break;
 		case enMenuOptions::eDeleteClient:
@@ -108,6 +189,7 @@ void StartMenu()
 			system("ClS");
 			std::cout << "This Option Just for test will be available.\n";
 			system("pause");
+			break;
 		case enMenuOptions::eUpdateClient:
             //UpdateClient()
             system("ClS");
