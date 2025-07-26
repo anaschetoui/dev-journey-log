@@ -166,19 +166,22 @@ void PrintShowAllClients()
 
 }
 
-stClients ReadClient(std::vector <stClients> vClients)
+stClients ReadClient(std::vector <stClients> vClients, bool SkipAccountNum=false)
 {
 	stClients NewClient;
 
-	std::cout << "Enter Account number: ";
-	getline(std::cin >> std::ws, NewClient.AccountNumber);
-	for(stClients Client : vClients)
+	if (SkipAccountNum == false)
 	{
-		while (NewClient.AccountNumber == Client.AccountNumber)
+		std::cout << "Enter Account number: ";
+		getline(std::cin >> std::ws, NewClient.AccountNumber);
+		for (stClients Client : vClients)
 		{
-			std::cout << "This Account Number [" << NewClient.AccountNumber
-				<< "] is already exist.\nEnter a different Account Number: ";
-			getline(std::cin >> std::ws, NewClient.AccountNumber);
+			while (NewClient.AccountNumber == Client.AccountNumber)
+			{
+				std::cout << "This Account Number [" << NewClient.AccountNumber
+					<< "] is already exist.\nEnter a different Account Number: ";
+				getline(std::cin >> std::ws, NewClient.AccountNumber);
+			}
 		}
 	}
 
@@ -282,7 +285,8 @@ void PrintClientCard(stClients Client)
 	std::cout << "Balance        : " << Client.Balance << std::endl;
 }								 
 
-void SaveDataToFile(std::vector <stClients> vClients, std::string Filename = ClientFile)
+void SaveDataToFile(std::vector <stClients> vClients, std::string Filename = ClientFile,
+	stClients NewClient =stClients(), bool UpdateFile = false)
 {
 	std::fstream MyFile;
 	MyFile.open(Filename, std::ios::out);
@@ -292,10 +296,27 @@ void SaveDataToFile(std::vector <stClients> vClients, std::string Filename = Cli
 	{
 		for(stClients Client : vClients)
 		{
-			if (Client.MarktoClient == false)
+			if(UpdateFile==true)
 			{
-				Line = ConvertRecordToLine(Client);
-				MyFile << Line << std::endl;
+				if (Client.MarktoClient == true)
+				{
+					Line = ConvertRecordToLine(NewClient);
+					MyFile << Line << std::endl;
+				}
+				else
+				{
+					Line = ConvertRecordToLine(Client);
+					MyFile << Line << std::endl;
+				}
+
+			}
+			else
+			{
+				if (Client.MarktoClient == false)
+				{
+					Line = ConvertRecordToLine(Client);
+					MyFile << Line << std::endl;
+				}
 			}
 		}
 		MyFile.close();
@@ -347,6 +368,68 @@ void PrintFindClientScreen()
 	}
 }
 
+void UpdateDataInFile(std::vector <stClients> vClients,stClients NewClient, std::string Filename = ClientFile)
+{
+	std::fstream MyFile;
+	MyFile.open(Filename, std::ios::out);
+	std::string Line;
+
+	if (MyFile.is_open())
+	{
+		for (stClients Client : vClients)
+		{
+			if (Client.MarktoClient == true)
+			{
+				Line = ConvertRecordToLine(NewClient);
+				MyFile << Line << std::endl;
+			}
+			else
+			{
+				Line = ConvertRecordToLine(Client);
+				MyFile << Line << std::endl;
+			}
+
+		}
+		MyFile.close();
+	}
+}
+
+void PrintUpdateClientScreen()
+{
+	HeaderPart("Update Client");
+	stClients Client;
+	std::vector <stClients> vClients = LoadDataFromFile();
+	char Answer = 'y';
+	std::string AccountNumber = ReadAccountNumber("Enter The Account Number: ");
+	if (FindClientByAccountNumber(vClients, Client, AccountNumber))
+	{
+		system("CLS");
+		HeaderPart("Update Client");
+		PrintClientCard(Client);
+		std::cout << "Do you want to update this Client (Y/N): ";
+		std::cin >> Answer;
+
+		if (Answer == 'y' || Answer == 'Y')
+		{
+			system("CLS");
+			HeaderPart("Update Client");
+			stClients NewClient = ReadClient(vClients,true);
+			NewClient.AccountNumber = AccountNumber;
+			MarktoClient(vClients, AccountNumber);
+			SaveDataToFile(vClients,ClientFile,NewClient,true);
+
+			vClients = LoadDataFromFile();
+			std::cout << "Client Updated Successfully.\n";
+
+		}
+	}
+	else
+	{
+        std::cout << "\nClient with Account Number [" << AccountNumber << "] not found.\n";
+	}
+
+}
+
 void StartMenu()
 {
 	enMenuOptions MenuOption; 
@@ -369,9 +452,7 @@ void StartMenu()
 			system("pause");
 			break;
 		case enMenuOptions::eUpdateClient:
-            //UpdateClient()
-            system("ClS");
-            std::cout << "This Option Just for test will be available.\n";
+			PrintUpdateClientScreen();
             system("pause");
             break;
 		case enMenuOptions::eFindClient:
