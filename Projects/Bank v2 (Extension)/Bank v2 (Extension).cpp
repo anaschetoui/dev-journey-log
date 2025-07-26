@@ -138,7 +138,7 @@ void ShowClientHeader()
 		<< "|\n";
     std::cout << std::string(88, '-') << "\n";
 }
-void PrintClientCard(stClients Client)
+void PrintClient(stClients Client)
 {
 	
 	std::cout
@@ -159,7 +159,7 @@ void PrintShowAllClients()
 	ShowClientHeader();
 	for (stClients Client : vClients)
 	{
-		PrintClientCard(Client);
+		PrintClient(Client);
 	}
 
 	std::cout << std::string(88, '-') << "\n";
@@ -177,7 +177,7 @@ stClients ReadClient(std::vector <stClients> vClients)
 		while (NewClient.AccountNumber == Client.AccountNumber)
 		{
 			std::cout << "This Account Number [" << NewClient.AccountNumber
-				<< "]is already exist.\nEnter a different Account Number: ";
+				<< "] is already exist.\nEnter a different Account Number: ";
 			getline(std::cin >> std::ws, NewClient.AccountNumber);
 		}
 	}
@@ -196,7 +196,7 @@ stClients ReadClient(std::vector <stClients> vClients)
 	{
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::cout << "Invalid input. Please enter a valid balance: ";
+    std::cout << "Invalid input.\nPlease enter a valid balance: ";
     }
 
     return NewClient;
@@ -239,6 +239,113 @@ void PrintAddClientScreen()
 		std::cin >> Answer;
 	} while (Answer == 'Y' || Answer == 'y');
 }
+std::string ReadAccountNumber(std::string Message = "Enter the account Number: ")
+{
+	std::string AccountNumber;
+	std::cout << Message;
+	std::cin >> AccountNumber;
+	return AccountNumber;
+}
+
+bool FindClientByAccountNumber(std::vector <stClients> vClients,stClients& Client, std::string AccountNumber)
+{
+	for (stClients& C : vClients)
+	{
+		if (AccountNumber == C.AccountNumber)
+		{
+			Client = C;
+			return true;
+		}
+		
+	}
+	return false;
+}
+
+void MarktoClient(std::vector <stClients> &vClients, std::string AccountNumber)
+{
+	for (stClients& Client : vClients)
+	{
+		if (Client.AccountNumber == AccountNumber)
+		{
+			Client.MarktoClient = true;
+			break;
+		}
+	}
+}
+
+void PrintClientCard(stClients Client)
+{
+	std::cout << "\nAccount Number : " << Client.AccountNumber << std::endl;
+	std::cout << "PIN Code       : " << Client.PIN_Code << std::endl;
+	std::cout << "Name           : " << Client.Name << std::endl;
+	std::cout << "Phone          : " << Client.Phone << std::endl;
+	std::cout << "Balance        : " << Client.Balance << std::endl;
+}								 
+
+void SaveDataToFile(std::vector <stClients> vClients, std::string Filename = ClientFile)
+{
+	std::fstream MyFile;
+	MyFile.open(Filename, std::ios::out);
+	std::string Line;
+
+	if (MyFile.is_open())
+	{
+		for(stClients Client : vClients)
+		{
+			if (Client.MarktoClient == false)
+			{
+				Line = ConvertRecordToLine(Client);
+				MyFile << Line << std::endl;
+			}
+		}
+		MyFile.close();
+	}
+}
+
+void PrintDeleteClientScreen()
+{
+	HeaderPart("Delete Client");
+	stClients Client;
+	std::vector <stClients> vClients = LoadDataFromFile();
+	std::string AccountNumber = ReadAccountNumber();
+	char Answer = 'n';
+	if (FindClientByAccountNumber(vClients, Client, AccountNumber))
+	{
+		PrintClientCard(Client);
+		std::cout << "\nDo you really want to delete this client (Y/N): ";
+		std::cin >> Answer;
+		if (Answer == 'y' || Answer == 'Y')
+		{
+			MarktoClient(vClients, AccountNumber);
+			SaveDataToFile(vClients);
+			vClients = LoadDataFromFile(); 
+
+			std::cout << "Client deleted succussfully.\n";
+		}
+	}
+	else
+	{
+        std::cout << "\nClient with Account Number [" << AccountNumber << "] not found.\n";
+	}
+}
+
+void PrintFindClientScreen()
+{
+	HeaderPart("Find Client");
+	stClients Client;
+	std::vector <stClients> vClients = LoadDataFromFile();
+	std::string AccountNumber = ReadAccountNumber();
+	if (FindClientByAccountNumber(vClients, Client, AccountNumber))
+	{
+		system("CLS");
+		HeaderPart("Find Client");
+		PrintClientCard(Client);
+	}
+	else
+	{
+		std::cout << "\nClient with Account Number [" << AccountNumber << "] not found.\n";
+	}
+}
 
 void StartMenu()
 {
@@ -258,7 +365,7 @@ void StartMenu()
 			system("pause");
 			break;
 		case enMenuOptions::eDeleteClient:
-			//DeleteClient()
+			PrintDeleteClientScreen();
 			system("pause");
 			break;
 		case enMenuOptions::eUpdateClient:
@@ -268,9 +375,7 @@ void StartMenu()
             system("pause");
             break;
 		case enMenuOptions::eFindClient:
-            //FindClient()
-            system("ClS");
-            std::cout << "This Option Just for test will be available.\n";
+			PrintFindClientScreen();
             system("pause");
             break;
 		case enMenuOptions::eTransactions:
