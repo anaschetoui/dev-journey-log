@@ -166,6 +166,79 @@ void PrintShowAllClients()
 
 }
 
+stClients ReadClient(std::vector <stClients> vClients)
+{
+	stClients NewClient;
+
+	std::cout << "Enter Account number: ";
+	getline(std::cin >> std::ws, NewClient.AccountNumber);
+	for(stClients Client : vClients)
+	{
+		while (NewClient.AccountNumber == Client.AccountNumber)
+		{
+			std::cout << "This Account Number [" << NewClient.AccountNumber
+				<< "]is already exist.\nEnter a different Account Number: ";
+			getline(std::cin >> std::ws, NewClient.AccountNumber);
+		}
+	}
+
+    std::cout << "Enter PIN Code: ";
+    getline(std::cin >> std::ws, NewClient.PIN_Code);
+
+    std::cout << "Enter Full Name: ";
+    getline(std::cin >> std::ws, NewClient.Name);
+
+    std::cout << "Enter Phone Number: ";
+    getline(std::cin >> std::ws, NewClient.Phone);
+
+    std::cout << "Enter Account Balance: ";
+    while (!(std::cin >> NewClient.Balance)) 
+	{
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cout << "Invalid input. Please enter a valid balance: ";
+    }
+
+    return NewClient;
+}
+
+std::string ConvertRecordToLine(stClients Client, std::string Seperator = "#//#")
+{
+	return Client.AccountNumber + Seperator +
+		Client.PIN_Code + Seperator +
+		Client.Name + Seperator +
+		Client.Phone + Seperator +
+		std::to_string(Client.Balance);
+}
+
+void AddNewClientToFile(stClients NewClient,std::string Filename = ClientFile)
+{
+	std::fstream MyFile;
+	MyFile.open(Filename, std::ios::app);
+	std::string Line = "";
+	if (MyFile.is_open())
+	{
+		Line = ConvertRecordToLine(NewClient);
+		MyFile << Line << std::endl;
+	}
+	MyFile.close();
+}
+
+void PrintAddClientScreen()
+{
+	HeaderPart("Add New Client");
+	std::vector <stClients> vClients = LoadDataFromFile();
+	
+	char Answer = 'N';
+	do
+	{
+		HeaderPart("Add New Client");
+		stClients NewClient = ReadClient(vClients);
+		AddNewClientToFile(NewClient);
+		std::cout << "\nClient Added successfully.\nDo You want to add more (Y/N): ";
+		std::cin >> Answer;
+	} while (Answer == 'Y' || Answer == 'y');
+}
 
 void StartMenu()
 {
@@ -181,13 +254,11 @@ void StartMenu()
 			system("pause");
 			break;
 		case enMenuOptions::eAddNewClient:
-			
+			PrintAddClientScreen();
 			system("pause");
 			break;
 		case enMenuOptions::eDeleteClient:
 			//DeleteClient()
-			system("ClS");
-			std::cout << "This Option Just for test will be available.\n";
 			system("pause");
 			break;
 		case enMenuOptions::eUpdateClient:
