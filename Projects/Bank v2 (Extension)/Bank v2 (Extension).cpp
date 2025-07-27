@@ -447,10 +447,19 @@ void TransactionsMenuScreen()
 
 double ReadDepositWithdrawNumber(std::string Message = "Please Enter Deposit Amount: ")
 {
-	double DepositAmount = 0.00;
+    double DepositAmount = 0.00;
 	std::cout << Message;
 	std::cin >> DepositAmount;
-	return DepositAmount;
+
+       while (std::cin.fail())
+	   {
+           std::cin.clear();
+           std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+           std::cout << "Invalid Number. Please enter a valid positive number: ";
+		   std::cin >> DepositAmount;
+       }
+	   return DepositAmount;
+
 }
 
 bool Deposit(std::vector <stClients>& vClients, double DepositAmount,std::string AccountNumber)
@@ -534,14 +543,47 @@ void PrintDepositScreenMenu()
 	}
 	else
 	{
-        std::cout << "Account number not found.\n";
+		std::cout << "\nClient with Account Number [" << AccountNumber << "] not found.\n";
 	}
 }
 
-//void PrintWithderawScreenMenu()
-//{
-//
-//}
+void PrintWithdrawScreenMenu()
+{
+	std::vector <stClients> vClients = LoadDataFromFile();
+	stClients Client;
+	HeaderPart("Withdraw Menu");
+	std::string AccountNumber = ReadAccountNumber();
+	char Answer = 'N';
+	if (FindClientByAccountNumber(vClients, Client, AccountNumber))
+	{
+		PrintClientCard(Client);
+		double WithdrawAmount = ReadDepositWithdrawNumber("\nPlease Enter Withdraw Amount: ");
+		while (WithdrawAmount > Client.Balance)
+		{
+			std::cout << "Withdraw amount cannot be greater than the current balance: " << Client.Balance ;
+			WithdrawAmount= ReadDepositWithdrawNumber("\nPlease enter a valid amount: ");
+		}
+		std::cout << "Are you sure you want to add this transactions (Y/N): ";
+		std::cin >> Answer;
+		if (Answer == 'Y' || Answer == 'y')
+		{
+			MarktoClient(vClients, AccountNumber);
+			SaveDataToFile_DepositWithdraw(vClients, WithdrawAmount, ClientFile, false);
+
+			vClients = LoadDataFromFile();
+		}
+		else
+		{
+			std::cout << "\nClient with Account Number [" << AccountNumber << "] not found.\n";
+		}
+
+	}
+}
+
+void PrintTotalBalancesScreenMenu()
+{
+
+}
 
 void PrintTransactions()
 {
@@ -559,11 +601,11 @@ void PrintTransactions()
 			 system("pause");
 			 break;
 		case enTransactionsOptions::Withdraw:
-			//PrintWithderawScreenMenu()
+			PrintWithdrawScreenMenu();
 			 system("pause");
 			 break;
 		case enTransactionsOptions::eTototalBalances:
-			 //PrintTotalBalancesScreenMenu()
+			PrintTotalBalancesScreenMenu();
 			system("pause");
 			break;
 		}
