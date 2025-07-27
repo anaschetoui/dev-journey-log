@@ -468,10 +468,47 @@ bool Deposit(std::vector <stClients>& vClients, double DepositAmount,std::string
 	}
 	return false;
 }
-void SaveDataToFile_DepositWithdraw(std::vector <stClients> vClient,std::string Filename = ClientFile ,bool Deposit=false)
+void SaveDataToFile_DepositWithdraw(std::vector <stClients> &vClients,double DepositWithdrawAmount ,std::string Filename,bool Deposit=true)
 {
 	std::fstream MyFiile;
-		//to be continued
+	MyFiile.open(Filename, std::ios::out);
+	std::string Line;
+
+	if (MyFiile.is_open())
+	{
+		for (stClients& Client : vClients)
+		{
+			if(Deposit)
+			{
+				if (Client.MarktoClient = true)
+				{
+					Client.Balance += DepositWithdrawAmount;
+					Line = ConvertRecordToLine(Client);
+					MyFiile << Line << std::endl;
+				}
+				else
+				{
+					Line = ConvertRecordToLine(Client);
+					MyFiile << Line << std::endl;
+				}
+			}
+			else
+			{
+				if (Client.MarktoClient = true)
+				{
+					Client.Balance -= DepositWithdrawAmount;
+					Line = ConvertRecordToLine(Client);
+					MyFiile << Line << std::endl;
+				}
+				else
+				{
+					Line = ConvertRecordToLine(Client);
+					MyFiile << Line << std::endl;
+				}
+			}
+
+		}
+	}
 }
 
 void PrintDepositScreenMenu()
@@ -489,15 +526,22 @@ void PrintDepositScreenMenu()
 		std::cin >> Answer;
 		if (Answer == 'Y' || Answer == 'y')
 		{
-			//to be continued
+			MarktoClient(vClients, AccountNumber);
+			SaveDataToFile_DepositWithdraw(vClients, DepositAmount, ClientFile);
+			vClients = LoadDataFromFile();
+			std::cout << "\nDeposit completed successfully.\n";
 		}
 	}
 	else
 	{
-		
         std::cout << "Account number not found.\n";
 	}
 }
+
+//void PrintWithderawScreenMenu()
+//{
+//
+//}
 
 void PrintTransactions()
 {
