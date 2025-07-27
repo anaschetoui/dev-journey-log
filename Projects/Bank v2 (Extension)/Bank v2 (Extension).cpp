@@ -489,7 +489,7 @@ void SaveDataToFile_DepositWithdraw(std::vector <stClients> &vClients,double Dep
 		{
 			if(Deposit)
 			{
-				if (Client.MarktoClient = true)
+				if (Client.MarktoClient == true)
 				{
 					Client.Balance += DepositWithdrawAmount;
 					Line = ConvertRecordToLine(Client);
@@ -503,7 +503,7 @@ void SaveDataToFile_DepositWithdraw(std::vector <stClients> &vClients,double Dep
 			}
 			else
 			{
-				if (Client.MarktoClient = true)
+				if (Client.MarktoClient == true)
 				{
 					Client.Balance -= DepositWithdrawAmount;
 					Line = ConvertRecordToLine(Client);
@@ -580,9 +580,44 @@ void PrintWithdrawScreenMenu()
 	}
 }
 
+double TotalBalances(std::vector <stClients> vClient)
+{
+	double Total = 0.00;
+	for (stClients Client : vClient)
+	{
+		Total += Client.Balance;
+	}
+	return Total;
+}
+
+void ShowTotalBalancesTable(stClients Client)
+{
+	std::cout
+		<< "| " << std::left << std::setw(15) << Client.AccountNumber
+		<< "| " << std::setw(25) << Client.Name
+		<< "| " << std::setw(12) << Client.Balance
+		<< "|\n";
+
+}
+
 void PrintTotalBalancesScreenMenu()
 {
+	std::vector <stClients> vClients=LoadDataFromFile();
+	HeaderPart("Total Balances");
 
+	std::cout << std::string(59, '-') << "\n";
+	std::cout
+		<< "| " << std::left << std::setw(15) << "Account Number"
+		<< "| " << std::setw(25) << "Client Name"
+		<< "| " << std::setw(12) << "Balance"
+		<< "|\n";
+	std::cout << std::string(59, '-') << "\n";
+	for(stClients Client : vClients)
+	{
+		ShowTotalBalancesTable(Client);
+	}
+	std::cout << std::string(59, '-') << "\n";
+	std::cout << "\t     Total Balances = " << std::to_string(TotalBalances(vClients)) << std::endl;
 }
 
 void PrintTransactions()
