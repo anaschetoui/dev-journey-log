@@ -8,7 +8,6 @@
 const std::string ClientFile = "ClientFile.txt";
 
 void MainMenuScreen();
-void StartMenu();
 void TransactionsMenuScreen();
 
 struct stClients
@@ -451,13 +450,13 @@ double ReadDepositWithdrawNumber(std::string Message = "Please Enter Deposit Amo
 	std::cout << Message;
 	std::cin >> DepositAmount;
 
-       while (std::cin.fail())
-	   {
-           std::cin.clear();
-           std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-           std::cout << "Invalid Number. Please enter a valid positive number: ";
-		   std::cin >> DepositAmount;
-       }
+	while (std::cin.fail() || DepositAmount <= 0)
+	{
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Invalid Number. Please enter a valid positive number: ";
+		std::cin >> DepositAmount;
+	}
 	   return DepositAmount;
 
 }
@@ -527,9 +526,15 @@ void PrintDepositScreenMenu()
 	HeaderPart("Deposit Menu");
 	std::string AccountNumber = ReadAccountNumber();
 	char Answer = 'n';
-	if (FindClientByAccountNumber(vClients,Client,AccountNumber))
+	while (!FindClientByAccountNumber(vClients, Client, AccountNumber))
 	{
+		HeaderPart("Deposit Menu");
+		std::cout << "Client with Account Number [" << AccountNumber << "] not found.\n";
+		AccountNumber = ReadAccountNumber("Please Enter an exist client: ");
+	}
+		HeaderPart("Deposit Menu");
 		PrintClientCard(Client);
+		std::cout << "\n";
 		double DepositAmount = ReadDepositWithdrawNumber();
 		std::cout << "Are you sure you want to add this transactions (Y/N): ";
 		std::cin >> Answer;
@@ -538,13 +543,8 @@ void PrintDepositScreenMenu()
 			MarktoClient(vClients, AccountNumber);
 			SaveDataToFile_DepositWithdraw(vClients, DepositAmount, ClientFile);
 			vClients = LoadDataFromFile();
-			std::cout << "\nDeposit completed successfully.\n";
+			std::cout << "\nDeposit completed successfully,New Balance is : " << Client.Balance+DepositAmount << std::endl;
 		}
-	}
-	else
-	{
-		std::cout << "\nClient with Account Number [" << AccountNumber << "] not found.\n";
-	}
 }
 
 void PrintWithdrawScreenMenu()
@@ -554,10 +554,17 @@ void PrintWithdrawScreenMenu()
 	HeaderPart("Withdraw Menu");
 	std::string AccountNumber = ReadAccountNumber();
 	char Answer = 'N';
-	if (FindClientByAccountNumber(vClients, Client, AccountNumber))
+	while (!FindClientByAccountNumber(vClients, Client, AccountNumber))
 	{
+		HeaderPart("Withdraw Menu");
+		std::cout << "Client with Account Number [" << AccountNumber << "] not found.\n";
+		AccountNumber = ReadAccountNumber("Please Enter an exist client: ");
+	}
+	
 		PrintClientCard(Client);
+
 		double WithdrawAmount = ReadDepositWithdrawNumber("\nPlease Enter Withdraw Amount: ");
+
 		while (WithdrawAmount > Client.Balance)
 		{
 			std::cout << "Withdraw amount cannot be greater than the current balance: " << Client.Balance ;
@@ -571,13 +578,11 @@ void PrintWithdrawScreenMenu()
 			SaveDataToFile_DepositWithdraw(vClients, WithdrawAmount, ClientFile, false);
 
 			vClients = LoadDataFromFile();
+			std::cout << "\Withdraw completed successfully,New Balance is : " << (Client.Balance - WithdrawAmount) << std::endl;
 		}
-		else
-		{
-			std::cout << "\nClient with Account Number [" << AccountNumber << "] not found.\n";
-		}
+		
 
-	}
+	
 }
 
 double TotalBalances(std::vector <stClients> vClient)
@@ -600,17 +605,24 @@ void ShowTotalBalancesTable(stClients Client)
 
 }
 
-void PrintTotalBalancesScreenMenu()
+void HeaderShowTotalBalancesTable()
 {
-	std::vector <stClients> vClients=LoadDataFromFile();
-	HeaderPart("Total Balances");
-
+	system("CLS");
+	std::cout << "\t\t\tBalances List\n";
 	std::cout << std::string(59, '-') << "\n";
 	std::cout
 		<< "| " << std::left << std::setw(15) << "Account Number"
 		<< "| " << std::setw(25) << "Client Name"
 		<< "| " << std::setw(12) << "Balance"
 		<< "|\n";
+}
+
+void PrintTotalBalancesScreenMenu()
+{
+	std::vector <stClients> vClients=LoadDataFromFile();
+	
+	HeaderShowTotalBalancesTable();
+	
 	std::cout << std::string(59, '-') << "\n";
 	for(stClients Client : vClients)
 	{
@@ -633,19 +645,22 @@ void PrintTransactions()
 		{
 		case enTransactionsOptions::eDeposit:
 			 PrintDepositScreenMenu();
-			 system("pause");
+			 std::cout << "Press any key to back to Transactions Menu...";
+			 system("pause>0");
 			 break;
 		case enTransactionsOptions::Withdraw:
 			PrintWithdrawScreenMenu();
-			 system("pause");
+			std::cout << "Press any key to back to Transactions Menu...";
+			system("pause>0");
 			 break;
 		case enTransactionsOptions::eTototalBalances:
 			PrintTotalBalancesScreenMenu();
-			system("pause");
+			std::cout << "Press any key to back to Transactions Menu...";
+			system("pause>0");
 			break;
 		}
 	} while (eTransactionOptions != enTransactionsOptions::MainMenu);
-	StartMenu();
+	
 }
 
 void StartMenu()
@@ -679,11 +694,10 @@ void StartMenu()
             break;
 		case enMenuOptions::eTransactions:
 			PrintTransactions();
-            system("pause");
 			break;
         }
 	} while (MenuOption != enMenuOptions::eExit);
-            HeaderPart("Program Ended");
+           HeaderPart("Program Ended");
     
 }
 
