@@ -24,8 +24,11 @@ Enter Year: 2024
 Enter Month: 2
 
 Number Of Days    in February is: 29
+
 Number Of Hours   in February is: 696
+
 Number Of Minutes in February is: 41760
+
 Number Of Seconds in February is: 2505600
 
 ## Author
