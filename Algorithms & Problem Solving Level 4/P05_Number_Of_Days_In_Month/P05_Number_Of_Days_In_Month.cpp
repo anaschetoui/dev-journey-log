@@ -85,7 +85,7 @@ short ReadMonth(std::string Message = "Enter a Month (1-12): ")
 
 bool isLeapYear(short Year)
 {
-	return  ((Year % 100) == 0) || ((Year % 4) == 0 && ((Year % 100) != 0));
+	return  (Year % 4 == 0 && Year % 100 != 0) || (Year % 400 == 0);
 }
 
 
