@@ -34,6 +34,11 @@ void IsLeapYear(int Year)
 	{
 		std::cout << "\nYes, Year " << Year << " is a leap Year.\n";
 	}
+	else if ((Year % 100) == 0)
+	{
+		std::cout << "\nNo, Year [" << Year << "] is not a leap year.\n";
+	}
+
 	else if ((Year % 4) == 0)
 	{
 		std::cout << "\nYes, Year [" << Year << "] is a leap Year.\n";
