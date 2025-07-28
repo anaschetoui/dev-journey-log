@@ -16,11 +16,14 @@ This program prints the number of days in a given month for a specified year. It
 
 ## Example
 Input:
+
 Year: 2024
+
 Month: 2
 
 Output:
+
 Number Of Days in Month 2 is: 29
 
 ## Author
-Anas Chetoui**@anaschetoui**
+Anas Chetoui **@anaschetoui**
