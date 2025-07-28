@@ -2,6 +2,10 @@
 
 This is a simple console-based Bank Management System written in C++ (C++14). The application allows you to manage clients, perform transactions, and view account information using a text file as the data store.
 
+
+https://github.com/user-attachments/assets/303f83e7-a86a-49e8-8343-c375d1158460
+
+
 ## Features
 
 - Show all clients
