@@ -28,19 +28,19 @@ int ReadYear(std::string Message = "Enter a Year (1-2099): ")
 
 short ReadMonth(std::string Message = "Enter a Month (1-12): ")
 {
-	short Year = 0;
+	short Month = 0;
 
 	std::cout << Message;
-	std::cin >> Year;
+	std::cin >> Month;
 
-	while (std::cin.fail() || (Year <= 0 || Year > 12))
+	while (std::cin.fail() || (Month <= 0 || Month > 12))
 	{
 		std::cin.clear();
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		std::cout << "Invalid Number/Month ,Enter a positive Number: ";
-		std::cin >> Year;
+		std::cin >> Month;
 	}
-	return Year;
+	return Month;
 }
 
 bool IsLeapYear(short Year)
