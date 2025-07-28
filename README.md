@@ -64,6 +64,7 @@ Feel free to follow me or reach out if you're on a similar path!
 🧠 Student | 💻 Self-Taught Developer 
 ---
 
-## 🧭 License
+## 📄 License
 
-This repository is open for learning. Don't copy, but feel free to get inspired.
+This project is licensed under the [MIT License](LICENSE) © 2025 Anas Chetoui.
+
