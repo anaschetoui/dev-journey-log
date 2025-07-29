@@ -1,7 +1,10 @@
-/*Problem 10:
-Write a program to print total days from the beginning of year.
-					@anaschetoui
+/*Problem 15:
+Write a program to read a date and check:
+- if it is last Day in Month
+- If it is last Month In Year
+			@anaschetoui
 */
+
 #include <iostream>
 #include <string>
 
@@ -67,7 +70,6 @@ short ReadDay(short Year, short Month, std::string Message = "Enter a Day : ")
 	}
 	return Day;
 }
-
 short NumberOfDayInMonth(short Month, short Year)
 {
 	int DayInMonth[13] = { 0,31,28,31,30,31,30,31,31,30,31,30,31 };
@@ -78,22 +80,22 @@ short NumberOfDayInMonth(short Month, short Year)
 	return DayInMonth[Month];
 }
 
-short HowManyDaysInThisYear(short Day, short Month, short Year)
+bool IsLastDayInMonth( short Day,short Month,short Year)
 {
-	short NumberDaysInYear = 0;
-	for (short i = 1; i < Month; i++)
-	{
-		NumberDaysInYear+= NumberOfDayInMonth(i, Year);
-	}
-
-	return NumberDaysInYear += Day;
+   
+	return (Day == NumberOfDayInMonth(Month, Year));
 }
 
+bool IsLastMonthInYear(short Month)
+{
+	return (Month == 12);
+}
 int main()
 {
 	short Year = ReadYear(), Month = ReadMonth(), Day = ReadDay(Year, Month);
 
-	std::cout << "\n\nNumber of Days from beginning of Year " << Year << " is " << HowManyDaysInThisYear(Day, Month, Year) << " Day(s).\n";
+	(IsLastDayInMonth(Day,Month,Year) ? std::cout << "\nYes, Day is Last Day in Month.\n" : std::cout << "\nNo, Day isn't Last Day in Month.\n");
+	(IsLastMonthInYear(Month) ? std::cout << "\nYes, Month is Last Month in Year.\n" : std::cout << "No, Month isn't last Month in Year.\n");
 
 	return 0;
 }

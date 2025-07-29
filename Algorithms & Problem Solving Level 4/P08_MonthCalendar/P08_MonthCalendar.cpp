@@ -71,7 +71,7 @@ short NumberOfDayInMonth(short Month, short Year)
 	int DayInMonth[13] = { 0,31,28,31,30,31,30,31,31,30,31,30,31 };
 	if (IsLeapYear(Year))
 	{
-		DayInMonth[3] = 29;
+		DayInMonth[2] = 29;
 	}
 	return DayInMonth[Month];
 }
