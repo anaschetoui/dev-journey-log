@@ -211,7 +211,7 @@ stDate IncreaseDateByXYearsFaster(stDate& date, short x = 10)
 
 stDate IncreaseDateByOneDecade(stDate& date)
 {
-	IncreaseDateByXYearsFaster(date);
+	IncreaseDateByXYears(date);
 	return date;
 }
 
@@ -230,13 +230,13 @@ stDate IncreaseDateByXDecadesFaster(stDate& date, short x = 10)
 
 stDate IncreaseDateByOneCentury(stDate& date)
 {
-	IncreaseDateByXDecadesFaster(date, 10);
+	IncreaseDateByXDecades(date, 10);
 	return date;
 }
 
 stDate IncreaseDateByOneMillennium(stDate& date)
 {
-	IncreaseDateByXDecadesFaster(date, 100);
+	IncreaseDateByXDecades(date, 100);
 	return date;
 }
 
