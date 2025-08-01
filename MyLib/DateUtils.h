@@ -1,65 +1,74 @@
 #pragma once
+
 #include <string>
 #include <iostream>
 #include <limits>
 #include <iomanip>
 
-    // Struct definition
-    struct stDate
-    {
-        short Year = 0;
-        short Month = 0;
-        short Day = 0;
-    };
+// Forward declarations for required structs
+struct stDate;
+struct stYearCaluclation;
+struct stPeriod;
 
-    struct stYearCaluclation
-    {
-        short Days;
-        short Hours;
-        short Minutes;
-        int Seconds;
-    };
+struct stDate
+{
+    short Day;
+    short Month;
+    short Year;
+};
 
-    // Function declarations
-    int ReadYear(std::string Message = "Enter a Year : ");
-    short ReadMonth(std::string Message = "Enter a Month : ");
-    bool IsLeapYear(short Year);
-    short DayOfWeekOrder(const stDate& date);
-    short ReadDay(short Year, short Month, std::string Message = "Enter a Day : ");
-    stDate ReadDate();
-    short NumberOfDayInMonth(short Month, short Year);
-    std::string DayName(short NumberOfday);
-    bool IsTheWeekend(short DayPosition);
-    stDate IncreaseDate(stDate& date);
-    short HowManyDaysInThisYear(short Day, short Month, short Year);
-    stDate CalculateVactaionsDays(const stDate& Date1, short VacationDays);
-    std::string MonthName(short MonthNumber);
-    bool IsDate1LessThanDate2(stDate Date1, stDate Date2);
-    bool IsDate1EqualDate2(stDate Date1, stDate Date2);
-    short CompareDate(stDate Date1, stDate Date2);
+struct stYearCaluclation
+{
+    int Days;
+    int Hours;
+    int Minutes;
+    int Seconds;
+};
 
-    // Only one version for each function to avoid ambiguity
-    stDate IncreaseDateByOneDay(stDate& date);
-    stDate IncreaseDateByXDays(stDate& date, short x = 10);
-    stDate IncreaseDateByOneWeek(stDate& date);
-    stDate IncreaseDateByXWeeks(stDate& date, short x = 10);
-    stDate IncreaseDateByOneMonth(stDate& date);
-    stDate IncreaseDateByXMonths(stDate& date, short x = 5);
-    stDate IncreaseDateByOneYear(stDate& date);
-    stDate IncreaseDateByXYears(stDate& date, short x = 10);
-    stDate IncreaseDateByXYearsFaster(stDate& date, short x = 10);
-    stDate IncreaseDateByOneDecade(stDate& date);
-    stDate IncreaseDateByXDecades(stDate& date, short x = 10);
-    stDate IncreaseDateByXDecadesFaster(stDate& date, short x = 10);
-    stDate IncreaseDateByOneCentury(stDate& date);
-    stDate IncreaseDateByOneMillennium(stDate& date);
+// Function declarations
+int ReadYear(std::string Message = "Enter a Year : ");
+short ReadMonth(std::string Message = "Enter a Month : ");
+bool IsLeapYear(short Year);
+short DayOfWeekOrder(const stDate& date);
+short ReadDay(short Year, short Month, std::string Message = "Enter a Day : ");
+stDate ReadDate();
+short NumberOfDayInMonth(short Month, short Year);
+std::string DayName(short NumberOfday);
+bool IsTheWeekend(short DayPosition);
+stDate IncreaseDate(stDate& date);
+short HowManyDaysInThisYear(short Day, short Month, short Year);
+stDate CalculateVactaionsDays(const stDate& Date1, short VacationDays);
+std::string MonthName(short MonthNumber);
+bool IsDate1LessThanDate2(stDate Date1, stDate Date2);
+bool IsDate1EqualDate2(stDate Date1, stDate Date2);
+short CompareDate(stDate Date1, stDate Date2);
 
-    stYearCaluclation YearCaluclation(short Year);
-    short NumberOfHoursInMonth(short Month, short Year);
-    short NumberOfMinutesInMonth(short Month, short Year);
-    int NumberOfSecondsInMonth(short Month, short Year);
-    void PrintCalendar(short Month, short Year);
+// Only one version for each function to avoid ambiguity
+stDate IncreaseDateByOneDay(stDate& date);
+stDate IncreaseDateByXDays(stDate& date, short x = 10);
+stDate IncreaseDateByOneWeek(stDate& date);
+stDate IncreaseDateByXWeeks(stDate& date, short x = 10);
+stDate IncreaseDateByOneMonth(stDate& date);
+stDate IncreaseDateByXMonths(stDate& date, short x = 5);
+stDate IncreaseDateByOneYear(stDate& date);
+stDate IncreaseDateByXYears(stDate& date, short x = 10);
+stDate IncreaseDateByXYearsFaster(stDate& date, short x = 10);
+stDate IncreaseDateByOneDecade(stDate& date);
+stDate IncreaseDateByXDecades(stDate& date, short x = 10);
+stDate IncreaseDateByXDecadesFaster(stDate& date, short x = 10);
+stDate IncreaseDateByOneCentury(stDate& date);
+stDate IncreaseDateByOneMillennium(stDate& date);
 
+stYearCaluclation YearCaluclation(short Year);
+short NumberOfHoursInMonth(short Month, short Year);
+short NumberOfMinutesInMonth(short Month, short Year);
+int NumberOfSecondsInMonth(short Month, short Year);
+void PrintCalendar(short Month, short Year);
+
+enum enCompareDate
+{
+    BeforeDate = -1, EqualDate = 0, AfterDate = 1
+};
     // Function implementations
     int ReadYear(std::string Message)
     {
@@ -108,6 +117,7 @@
     short DayOfWeekOrder(const stDate& date)
     {
         return DayOfWeekOrder(date.Day, date.Month, date.Year);
+    
     }
 
     short ReadDay(short Year, short Month, std::string Message)
@@ -232,6 +242,19 @@
         if (Date1.Day < Date2.Day)
             return true;
         return false;
+    }
+
+    bool IsDate1AfterDate2 (stDate Date1,  stDate Date2)
+    {
+        if (Date1.Year > Date2.Year)
+            return true;
+        if (Date1.Year < Date2.Year)
+            return false;
+        if (Date1.Month > Date2.Month)
+            return true;
+        if (Date1.Month < Date2.Month)
+            return false;
+        return Date1.Day > Date2.Day;
     }
 
     // Only reference version for all IncreaseDateBy* functions
@@ -429,4 +452,14 @@
         return (IsDate1LessThanDate2(Date1, Date2)) ? enCompareDate::BeforeDate :
             ((IsDate1EqualDate2(Date1, Date2)) ? enCompareDate::EqualDate : enCompareDate::AfterDate);
 
+    
+    }
+
+    bool IsOverlapPeriods(stPeriod Period1, stPeriod Period2)
+    {
+        if (IsDate1LessThanDate2(Period2.End, Period1.Start) || IsDate1AfterDate2(Period2.Start, Period1.End))
+        {
+            return false;
+        }
+        return true;
     }
