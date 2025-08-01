@@ -56,8 +56,8 @@ short NumberOfMinutesInMonth(short Month, short Year);
 int NumberOfSecondsInMonth(short Month, short Year);
 void PrintCalendar(short Month, short Year);
 
-// Function implementations
 
+// Function implementations
 int ReadYear(std::string Message)
 {
     int Year = 0;
