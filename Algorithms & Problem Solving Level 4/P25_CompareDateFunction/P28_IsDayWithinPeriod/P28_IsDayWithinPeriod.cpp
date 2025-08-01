@@ -8,9 +8,12 @@ Write a program to read a Period and Date, then check if date is within this per
 
 
 
-bool IsDayWithinThisPeriod(stPeriod Period1,stDate DateToCheck)
+bool IsDayWithinThisPeriod(stPeriod Period1, stDate DateToCheck)
 {
-	return (IsDate1LessThanDate2(DateToCheck, Period1.End) && (IsDate1AfterDate2(DateToCheck, Period1.Start)));
+    return (
+        (IsDate1AfterDate2(DateToCheck, Period1.Start) || IsDate1EqualDate2(DateToCheck, Period1.Start)) &&
+        (IsDate1LessThanDate2(DateToCheck, Period1.End) || IsDate1EqualDate2(DateToCheck, Period1.End))
+    );
 }
 
 int main()
