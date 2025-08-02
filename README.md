@@ -9,17 +9,17 @@ This repository documents every step I take from solving algorithms in C++ to bu
 ### 🧱 Phase 1: Programming Foundations
 | # | Course | Status |
 |--|--------|--------|
-| 01 | Foundations Level 1 | ✅ Completed |
-| 02 | Algorithms Level 1 | ✅ Completed |
-| 03 | C++ Level 1 | ✅ Completed |
-| 04 | Advanced Solutions For Algorithms L1 | ✅ Completed |
-| 05 | Algorithms Level 2 | ✅ Completed |
-| 06 | C++ Level 2 | ✅ Completed |
-| 07 | Algorithms Level 3 | ✅ Completed |
+| 01 | ~~Foundations Level 1~~ | ✅ Completed |
+| 02 | ~~Algorithms Level 1~~ | ✅ Completed |
+| 03 | ~~C++ Level 1~~ | ✅ Completed |
+| 04 | ~~Advanced Solutions For Algorithms L1~~ | ✅ Completed |
+| 05 | ~~Algorithms Level 2~~ | ✅ Completed |
+| 06 | ~~C++ Level 2~~ | ✅ Completed |
+| 07 | ~~Algorithms Level 3~~ | ✅ Completed |
 | 08 | Algorithms Level 4 | 🔄 In Progress |
-| 09 | Foundations Level 2 | ⏳ Soon |
-| 10 | OOP Level 1 | ⏳ Planned |
-| 11 | OOP Level 2 | ⏳ Planned |
+| 09 | ~~Foundations Level 2~~ | ✅ Completed |
+| 10 | OOP Level 1 | ⏳ Soon |
+| 11 | OOP Level 2 | ⏳ Soon |
 | 12 | Data Structures Level 1 | ⏳ Planned |
 | 13 | Algorithms Level 5 | ⏳ Planned |
 
