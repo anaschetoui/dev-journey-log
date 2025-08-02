@@ -532,3 +532,38 @@ short OverlapCountDay(stPeriod Period1, stPeriod Period2)
 
     return Counter;
 }
+inline std::vector<short> SplitDate(std::string DateString, std::string DateSperator = "/")
+{
+    std::vector<short> vDate;
+    std::string date;
+    short pos = 0;
+
+    while ((pos = DateString.find(DateSperator)) != std::string::npos)
+    {
+        date = DateString.substr(0, pos);
+
+        if (!date.empty())
+        {
+            vDate.push_back(std::stoi(date));
+        }
+        DateString.erase(0, pos + DateSperator.length());
+    }
+    if (!DateString.empty())
+    {
+        vDate.push_back(std::stoi(DateString));
+    }
+
+    return vDate;
+}
+
+inline stDate ConvertDateStringToDate(std::vector<short> vDate)
+{
+    stDate Date;
+
+    Date.Day = vDate[0];
+    Date.Month = vDate[1];
+    Date.Year = vDate[2];
+
+    return Date;
+}
+
