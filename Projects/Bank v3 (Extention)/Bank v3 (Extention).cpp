@@ -1,13 +1,11 @@
 /****************************************************************
- * Bank Management System (Version 3)
- *
- * This program implements a banking management system with:
- * - Client account management (add, delete, update, find)
- * - User management with permission control
- * - Transaction operations (deposit, withdraw, balance reports)
- * - Login system with role-based access control
- *
- * Data is stored in text files for both clients and users
+ * Bank Management System (Version 3)                           *
+ * This program implements a banking management system with:    *
+ * - Client account management (add, delete, update, find)      *
+ * - User management with permission control				    *
+ * - Transaction operations (deposit, withdraw, balance reports)*
+ * - Login system with role-based access control				*
+ * Data is stored in text files for both clients and users      *
  ****************************************************************/
 
 #include <iostream>
@@ -30,6 +28,7 @@ void PrintListUsers();
 void PrintAddNewUser();
 void PrintDeleteUser();
 void PrintFindUser();
+void PrintUpdateUser();
 
 // Permission flags using bitwise operations
 const short READ_SHOW_CLIENT = 1;     // 0001
@@ -85,8 +84,6 @@ enMenuOptions ReadOptions(std::string Message = "Choose an option (1-8): ")
 {
 	short Options = 0;
 	do {
-		system("ClS");    // Clear the screen 
-		MainMenuScreen(); // and show the main menu again for better formatting
 		std::cout << Message;
 		std::cin >> Options;
 		while (std::cin.fail())
@@ -414,35 +411,28 @@ void SaveDataToFile(std::vector <stClients> vClients, std::string Filename = Cli
 	MyFile.open(Filename, std::ios::out);
 	std::string Line;
 
-	if (MyFile.is_open())
-	{
+    if (MyFile.is_open())
+    {
 		for (stClients Client : vClients)
 		{
-			if (UpdateFile == true)
+			if (UpdateFile)
 			{
-				if (Client.MarktoClient == true)
-				{
-					Line = ConvertRecordToLine(NewClient);
-					MyFile << Line << std::endl;
-				}
-				else
-				{
-					Line = ConvertRecordToLine(Client);
-					MyFile << Line << std::endl;
-				}
-
+				// When updating, use NewClient for marked clients, otherwise use original client
+				Line = ConvertRecordToLine(Client.MarktoClient ? NewClient : Client);
+				MyFile << Line << std::endl;
 			}
 			else
 			{
-				if (Client.MarktoClient == false)
+				// When deleting, only write unmarked clients
+				if (!Client.MarktoClient)
 				{
 					Line = ConvertRecordToLine(Client);
 					MyFile << Line << std::endl;
 				}
 			}
 		}
-		MyFile.close();
-	}
+    MyFile.close();
+    }
 }
 
 /**
@@ -635,41 +625,21 @@ void SaveDataToFile_DepositWithdraw(std::vector <stClients>& vClients, double De
 	MyFile.open(Filename, std::ios::out);
 	std::string Line;
 
-	if (MyFile.is_open())
-	{
-		for (stClients& Client : vClients)
-		{
-			if (Deposit)
-			{
-				if (Client.MarktoClient == true)
-				{
-					Client.Balance += DepositWithdrawAmount;
-					Line = ConvertRecordToLine(Client);
-					MyFile << Line << std::endl;
-				}
-				else
-				{
-					Line = ConvertRecordToLine(Client);
-					MyFile << Line << std::endl;
-				}
-			}
-			else
-			{
-				if (Client.MarktoClient == true)
-				{
-					Client.Balance -= DepositWithdrawAmount;
-					Line = ConvertRecordToLine(Client);
-					MyFile << Line << std::endl;
-				}
-				else
-				{
-					Line = ConvertRecordToLine(Client);
-					MyFile << Line << std::endl;
-				}
-			}
+    if (MyFile.is_open())
+    {
+    for (stClients& Client : vClients)
+    {
+    // Update balance only for marked clients
+    if (Client.MarktoClient)
+    {
+    // Add for deposit, subtract for withdrawal
+    Client.Balance += Deposit ? DepositWithdrawAmount : -DepositWithdrawAmount;
+    }
 
-		}
-		MyFile.close();
+    // Write record to file (for all clients)
+    Line = ConvertRecordToLine(Client);
+    MyFile << Line << std::endl;
+    }
 	}
 }
 
@@ -806,6 +776,12 @@ void PrintTotalBalancesScreenMenu()
 	std::cout << "\t     Total Balances = " << std::to_string(TotalBalances(vClients)) << std::endl;
 }
 
+void PressAnyKey(std::string Message)
+{
+	std::cout << "\nPress any key to back to " << Message << "...";
+	system("pause>0");
+}
+
 /**
  * Handles the transactions menu and workflow
  */
@@ -821,18 +797,15 @@ void PrintTransactionsMenu()
 		{
 		case enTransactionsMenuOptions::eDeposit:
 			PrintDepositScreenMenu();
-			std::cout << "Press any key to back to Transactions Menu...";
-			system("pause>0");
+			PressAnyKey("Transactions Menu");
 			break;
 		case enTransactionsMenuOptions::Withdraw:
 			PrintWithdrawScreenMenu();
-			std::cout << "Press any key to back to Transactions Menu...";
-			system("pause>0");
+			PressAnyKey("Transactions Menu");
 			break;
 		case enTransactionsMenuOptions::eTototalBalances:
 			PrintTotalBalancesScreenMenu();
-			std::cout << "Press any key to back to Transactions Menu...";
-			system("pause>0");
+			PressAnyKey("Transactions Menu");
 			break;
 		}
 	} while (eTransactionOptions != enTransactionsMenuOptions::MainMenu);
@@ -857,6 +830,18 @@ enum enManageUsersMenuOptions
 	UpdateUser = 4, eFindUser = 5, eMainMenu = 6
 };
 
+void ShowAccessDeniedMessage()
+{
+	system("CLS");
+	std::cout << std::string(50, '-') << "\n";
+	std::cout << "               ACCESS DENIED\n";
+	std::cout << std::string(50, '-') << "\n";
+	std::cout << "You don't have permission to access this feature.\n";
+	std::cout << "Please contact your administrator for assistance.\n";
+	std::cout << std::string(50, '-') << "\n\n";
+	system("pause");
+}
+
 /**
  * Main menu controller based on user permissions
  * @param UserPermissions Permission bits for logged in user
@@ -877,11 +862,7 @@ void StartMenu(short UserPermissions)
 				system("pause");
 			}
 			else
-			{
-				system("CLS");
-				std::cout << "Access Denied,\nYou dont Have Permission to do this,\nPlease Contact Your Admin.\n\n";
-				system("pause");
-			}
+				ShowAccessDeniedMessage();
 			break;
 		case enMenuOptions::eAddNewClient:
 			if (UserPermissions & ADD_NEW_CLIENT)
@@ -890,11 +871,7 @@ void StartMenu(short UserPermissions)
 				system("pause");
 			}
 			else
-			{
-				system("CLS");
-				std::cout << "Access Denied,\nYou dont Have Permission to do this,\nPlease Contact Your Admin.\n\n";
-				system("pause");
-			}
+				ShowAccessDeniedMessage();
 			break;
 		case enMenuOptions::eDeleteClient:
 			if (UserPermissions & DELETE_CLIENT)
@@ -903,11 +880,7 @@ void StartMenu(short UserPermissions)
 				system("pause");
 			}
 			else
-			{
-				system("CLS");
-				std::cout << "Access Denied,\nYou dont Have Permission to do this,\nPlease Contact Your Admin.\n\n";
-				system("pause");
-			}
+				ShowAccessDeniedMessage();
 			break;
 		case enMenuOptions::eUpdateClient:
 			if (UserPermissions & UPDATE_CLIENT)
@@ -916,11 +889,7 @@ void StartMenu(short UserPermissions)
 				system("pause");
 			}
 			else
-			{
-				system("CLS");
-				std::cout << "Access Denied,\nYou dont Have Permission to do this,\nPlease Contact Your Admin.\n\n";
-				system("pause");
-			}
+				ShowAccessDeniedMessage();
 			break;
 		case enMenuOptions::eFindClient:
 			if (UserPermissions & FIND_CLIENT)
@@ -929,11 +898,7 @@ void StartMenu(short UserPermissions)
 				system("pause");
 			}
 			else
-			{
-				system("CLS");
-				std::cout << "Access Denied,\nYou dont Have Permission to do this,\nPlease Contact Your Admin.\n\n";
-				system("pause");
-			}
+				ShowAccessDeniedMessage();
 			break;
 		case enMenuOptions::eTransactions:
 			if (UserPermissions & TRANSACTIONS_ACCESS)
@@ -941,22 +906,13 @@ void StartMenu(short UserPermissions)
 				PrintTransactionsMenu();
 			}
 			else
-			{
-				system("CLS");
-				std::cout << "Access Denied,\nYou dont Have Permission to do this,\nPlease Contact Your Admin.\n\n";
-				system("pause");
-			}
+				ShowAccessDeniedMessage();
 			break;
 		case enMenuOptions::eManageUsers:
 			if (UserPermissions & MANAGE_USERS_ACCESS)
 				PrintManageUsersMenu();
 			else
-			{
-				system("CLS");
-				std::cout << "Access Denied,\nYou dont Have Permission to do this,\nPlease Contact Your Admin.\n\n";
-				system("pause");
-
-			}
+				ShowAccessDeniedMessage();
 			break;
 		}
 	} while (MenuOption != enMenuOptions::eLogout);
@@ -1016,6 +972,7 @@ void ManageUsersMenuScreen()
 	std::cout << "================================\n";
 }
 
+
 /**
  * Handles the user management menu and workflow
  */
@@ -1031,28 +988,23 @@ void PrintManageUsersMenu()
 		{
 		case enManageUsersMenuOptions::eListUsers:
 			PrintListUsers();
-			std::cout << "Press any key to back to Manage Users Menu...";
-			system("pause>0");
+			PressAnyKey("Manage Users Menu");
 			break;
 		case enManageUsersMenuOptions::eAddNewUser:
 			PrintAddNewUser();
-			std::cout << "Press any key to back to Manage Users Menu...";
-			system("pause>0");
+			PressAnyKey("Manage Users Menu");
 			break;
 		case enManageUsersMenuOptions::eDeleteUser:
 			PrintDeleteUser();
-			std::cout << "Press any key to back to Manage Users Menu...";
-			system("pause>0");
+			PressAnyKey("Manage Users Menu");
 			break;
 		case enManageUsersMenuOptions::UpdateUser:
-			//PrintUpdateUser(); // Not implemented yet
-			std::cout << "Press any key to back to Manage Users Menu...";
-			system("pause>0");
+			PrintUpdateUser(); 
+			PressAnyKey("Manage Users Menu");
 			break;
 		case enManageUsersMenuOptions::eFindUser:
-			PrintFindUser();
-			std::cout << "Press any key to back to Manage Users Menu...";
-			system("pause>0");
+			PrintFindUser(); 
+			PressAnyKey("Manage Users Menu");
 			break;
 		}
 	} while (MenuOptions != enManageUsersMenuOptions::eMainMenu);
@@ -1216,48 +1168,66 @@ stUser ReadPermissions(stUser User)
 	std::cin >> GiveAccess;
 
 	// Full access shortcut
-	if (GiveAccess == 'Y' || GiveAccess == 'y')
+	if (GiveAccess == 'Y') {
 		User.Permisions = ALLPERMISSIONS;
+		std::cout << "\nFull access granted to this user.\n";
+	}
 
 	// Individual permission settings if not full access
-	if (!(User.Permisions == ALLPERMISSIONS))
-	{
-		std::cout << "Do you Give access to: \n\n";
+	if (User.Permisions != ALLPERMISSIONS) {
+		std::cout << "\n== Permission Settings ==\n";
+		std::cout << "Answer Y/N for each permission:\n";
 
-		std::cout << "Show Client List (Y/N): ";
+		// Show Clients permission
+		std::cout << "Grant 'Show Client List' access? (Y/N): ";
 		std::cin >> GiveAccess;
-		if (GiveAccess == 'Y' || GiveAccess == 'y')
-			User.Permisions = User.Permisions | READ_SHOW_CLIENT;
+		GiveAccess = toupper(GiveAccess);
+		if (GiveAccess == 'Y')
+			User.Permisions |= READ_SHOW_CLIENT;
 
-		std::cout << "Add New Client (Y/N): ";
+		// Add Client permission
+		std::cout << "Grant 'Add New Client' access? (Y/N): ";
 		std::cin >> GiveAccess;
-		if (GiveAccess == 'Y' || GiveAccess == 'y')
-			User.Permisions = User.Permisions | ADD_NEW_CLIENT;
+		GiveAccess = toupper(GiveAccess);
+		if (GiveAccess == 'Y')
+			User.Permisions |= ADD_NEW_CLIENT;
 
-		std::cout << "Delete Client (Y/N): ";
+		// Delete Client permission
+		std::cout << "Grant 'Delete Client' access? (Y/N): ";
 		std::cin >> GiveAccess;
-		if (GiveAccess == 'Y' || GiveAccess == 'y')
-			User.Permisions = User.Permisions | DELETE_CLIENT;
+		GiveAccess = toupper(GiveAccess);
+		if (GiveAccess == 'Y')
+			User.Permisions |= DELETE_CLIENT;   
 
-		std::cout << "Update Client (Y/N): ";
+		// Update Client permission
+		std::cout << "Grant 'Update Client' access? (Y/N): ";
 		std::cin >> GiveAccess;
-		if (GiveAccess == 'Y' || GiveAccess == 'y')
-			User.Permisions = User.Permisions | UPDATE_CLIENT;
+		GiveAccess = toupper(GiveAccess);
+		if (GiveAccess == 'Y')
+			User.Permisions |= UPDATE_CLIENT;
 
-		std::cout << "Find Client (Y/N): ";
+		// Find Client permission
+		std::cout << "Grant 'Find Client' access? (Y/N): ";
 		std::cin >> GiveAccess;
-		if (GiveAccess == 'Y' || GiveAccess == 'y')
-			User.Permisions = User.Permisions | FIND_CLIENT;
+		GiveAccess = toupper(GiveAccess);
+		if (GiveAccess == 'Y')
+			User.Permisions |= FIND_CLIENT;
 
-		std::cout << "Transaction Access (Y/N): ";
+		// Transactions permission
+		std::cout << "Grant 'Transactions' access? (Y/N): ";
 		std::cin >> GiveAccess;
-		if (GiveAccess == 'Y' || GiveAccess == 'y')
-			User.Permisions = User.Permisions | TRANSACTIONS_ACCESS;
+		GiveAccess = toupper(GiveAccess);
+		if (GiveAccess == 'Y')
+			User.Permisions |= TRANSACTIONS_ACCESS;
 
-		std::cout << "Manage Users Access (Y/N): ";
+		// Manage Users permission
+		std::cout << "Grant 'Manage Users' access? (Y/N): ";
 		std::cin >> GiveAccess;
-		if (GiveAccess == 'Y' || GiveAccess == 'y')
-			User.Permisions = User.Permisions | MANAGE_USERS_ACCESS;
+		GiveAccess = toupper(GiveAccess);
+		if (GiveAccess == 'Y')
+			User.Permisions |= MANAGE_USERS_ACCESS;
+
+		std::cout << "\nPermissions have been set successfully.\n";
 	}
 
 	return User;
@@ -1361,34 +1331,33 @@ void SaveUserToFile(std::vector <stUser> vUser, std::string Filename = UserFile,
 	std::string Line;
 
 	if (MyFile.is_open())
-	{
-		for (stUser User : vUser)
-		{
-			if (UpdateFile)
-			{
-				if (User.MarkUserFlag)
-				{
-					Line = ConvertUserToLine(NewUser);
-					MyFile << Line << std::endl;
-				}
-				else
-				{
-					Line = ConvertUserToLine(User);
-					MyFile << Line << std::endl;
-				}
-			}
-			else
-			{
-				if (!User.MarkUserFlag)
-				{
-					Line = ConvertUserToLine(User);
-					MyFile << Line << std::endl;
-				}
-			}
-		}
-		MyFile.close();
-	}
+        if (MyFile.is_open())
+        {
+        for (stUser& User : vUser)
+        {
+        // Skip marked records when deleting
+        if (!UpdateFile && User.MarkUserFlag)
+        continue;
+
+        // Use NewUser data for marked records during update
+        Line = ConvertUserToLine((UpdateFile && User.MarkUserFlag) ? NewUser : User);
+        MyFile << Line << std::endl;
+        }
+        MyFile.close();
+        }
 }
+
+void PrintUserCard(stUser User)
+{
+	std::cout << "\n\n";
+	std::cout << " User Information\n";
+	std::cout << std::string(18, '-') << "\n";
+	std::cout << "Username   : " << User.Username;
+	std::cout << "\nPassword   : " << User.Password;
+	std::cout << "\nPermissions: " << User.Permisions << "\n";
+	std::cout << std::string(18, '-') << "\n";
+}
+
 
 /**
  * Handles the delete user screen and workflow
@@ -1410,13 +1379,7 @@ void PrintDeleteUser()
 	else if (FindUserByUsername(vUser, User, Username))
 	{
 		ShowHeader("Delete User");
-		std::cout << "\n\n";
-		std::cout << " User Information\n";
-		std::cout << std::string(18, '-') << "\n";
-		std::cout << "Username   : " << User.Username;
-		std::cout << "\nPassword   : " << User.Password;
-		std::cout << "\nPermissions: " << User.Permisions << "\n";
-		std::cout << std::string(18, '-') << "\n";
+		PrintUserCard(User);
 
 		std::cout << "\nDo you really want to delete this User (Y/N): ";
 		std::cin >> Answer;
@@ -1435,6 +1398,7 @@ void PrintDeleteUser()
 		std::cout << "This User [" << Username << "] does not exist.\n";
 }
 
+
 /**
  * Handles the find user screen and workflow
  */
@@ -1449,13 +1413,44 @@ void PrintFindUser()
 	if (FindUserByUsername(vUser, User, Username))
 	{
 		ShowHeader("Find User");
-		std::cout << "\n\n";
-		std::cout << " User Information\n";
-		std::cout << std::string(18, '-') << "\n";
-		std::cout << "Username   : " << User.Username;
-		std::cout << "\nPassword   : " << User.Password;
-		std::cout << "\nPermissions: " << User.Permisions << "\n";
-		std::cout << std::string(18, '-') << "\n";
+		PrintUserCard(User);
+	}
+	else
+		std::cout << "This User [" << Username << "] does not exist.\n";
+}
+
+void PrintUpdateUser()
+{
+	ShowHeader("Update User");
+
+	std::vector<stUser> vUser = LoadUserFromFile();
+
+	stUser User;
+	std::string Username = ReadUsernamePassword("Enter username to find: ");
+
+	char Answer = 'n';
+
+	if (FindUserByUsername(vUser, User, Username))
+	{
+		ShowHeader("UpdateUser");
+		PrintUserCard(User);
+		
+		std::cout << "\n\ndo you want to update this user (Y/N): ";
+		std::cin >> Answer;
+
+		if(Answer == 'Y' || Answer == 'y')
+		{
+			stUser NewUser = ReadNewUser(vUser,true);
+			NewUser.Username = Username;
+
+			MarkUserFlag(vUser, Username);
+			SaveUserToFile(vUser,UserFile,NewUser,true);
+
+			vUser = LoadUserFromFile();
+
+			std::cout << "The User Updated successfully.\n";
+		}
+
 	}
 	else
 		std::cout << "This User [" << Username << "] does not exist.\n";
