@@ -6,6 +6,8 @@
 
 const std::string ClientFile = "ClientFile.txt";
 
+void ATM_MainMenu();
+
 struct stClients
 {
 	std::string AccountNumber;
@@ -13,7 +15,6 @@ struct stClients
 	std::string Name;
 	std::string Phone;
 	double Balance = 0.00;
-	bool MarkFlagClient = false;
 };
 
 stClients GlobalClient;
@@ -45,7 +46,7 @@ std::string ReadAccountNumber(std::string Message= "Enter Account Number: ")
 
 std::string ReadPINCode(std::string Message = "Enter PIN Code: ")
 {
-	short PIN = 0;
+	int PIN = 0;
 
 	std::cout << Message;
 	std::cin >> PIN;
@@ -65,7 +66,7 @@ std::string ReadPINCode(std::string Message = "Enter PIN Code: ")
 std::vector <std::string> vSplitString(std::string Line, std::string Seperator = "#//#")
 {
 	std::vector <std::string> vSplit;
-	short pos = 0;
+	size_t pos = 0;
 	std::string word = "";
 
 	while (((pos = Line.find(Seperator)) != std::string::npos))
@@ -150,27 +151,37 @@ std::string ConvertRecordToLine(stClients Client, std::string Seperator = "#//#"
 		std::to_string(Client.Balance);
 }
 
-std::vector <stClients> SaveDataToFile(std::vector <stClients> vClients, std::string Filename ,
-	stClients ModifiedClient )
+std::vector <stClients> SaveDataToFile(std::vector <stClients> vClients, std::string Filename=ClientFile )
 {
-	std::fstream MyFile;
-	MyFile.open(Filename, std::ios::out);
-	std::string Line;
+    std::fstream MyFile;
+    MyFile.open(Filename, std::ios::out);
+    std::string Line;
 
 	if (MyFile.is_open())
 	{
 		for (stClients Client : vClients)
 		{
-				Line = ConvertRecordToLine(Client.MarkFlagClient ? ModifiedClient : Client);
+			if (Client.AccountNumber == GlobalClient.AccountNumber)
+			{
+				Line = ConvertRecordToLine(GlobalClient);
 				MyFile << Line << std::endl;
+			}
+			else
+			{
+				Line = ConvertRecordToLine(Client);
+				MyFile << Line << std::endl;
+			
+			}
 		}
 		MyFile.close();
 	}
 	return vClients;
 }
 
-void LoginScreen(std::vector <stClients> vClient)
+
+void LoginScreen()
 {
+	std::vector <stClients> vClient = LoadDataFromFile();
 	ShowHeaderScreen("LOGIN SCREEN");
 	std::string AccountNumber = ReadAccountNumber();
 	std::string PIN = ReadPINCode();
@@ -185,6 +196,7 @@ void LoginScreen(std::vector <stClients> vClient)
 		AccountNumber = ReadAccountNumber();
 		PIN = ReadPINCode();
 	}
+	ATM_MainMenu();
 	
 }
 
@@ -231,6 +243,7 @@ void QuickWithdrawMenuScreen()
 	std::cout << "      [7] 800       [8] 1000\n";
 	std::cout << "      [9] Exit\n";
 	std::cout << std::string(30, '=') << "\n";
+	std::cout << "Your Balance : " << GlobalClient.Balance << "\n";
 
 }
 
@@ -252,58 +265,181 @@ short ReadChoices(std::string Message = "Choose from [1 to 8]:  ")
 	return Choice;
 }
 
-short WithdrawMoney(short Choice)
+short GetQuickWithdrawAmount(short Choice)
 {
 	short arr[8] = { 20,50,100,200,400,600,800,1000 };
 
 	return arr[Choice - 1];
 }
 
-
-void Withdraw(stClients& Client,short Choice)
+void PerformWithdraw(short Choice)
 {
-	short WithdrawAmount = WithdrawMoney(Choice);
-	Client.Balance -= WithdrawAmount;
-	Client.MarkFlagClient = true;
+	char Answer = 'n';
+
+	if (Choice == 9) 
+		return;
+
+	short withdraw = GetQuickWithdrawAmount(Choice);
+
+	if (GlobalClient.Balance < withdraw)
+	{
+		std::cout << "\nInsufficient balance for this transaction.\n";
+		return;
+	}
+
+	std::cout << "Are you dure want perform this transaction (Y/N) ";
+	std::cin >> Answer;
+
+	std::vector <stClients> vClients = LoadDataFromFile();
+	
+		if (Answer == 'y' || Answer == 'Y')
+		{
+			GlobalClient.Balance -= withdraw;
+			SaveDataToFile(vClients);
+			std::cout << "\n\nDone Successfully.New Balance is: " << GlobalClient.Balance
+				<< std::endl;
+		}
 }
 
-void QuickWithdrawMainMenu()
-{
-	std::vector <stClients> vClient = LoadDataFromFile();
-
+void ShowQuickWithdrawMenu()
+{	
 	QuickWithdrawMenuScreen();
-	std::cout << "Your Balance : " << GlobalClient.Balance<<"\n";
+	
 	short Choice = ReadChoices();
+	
+	PerformWithdraw(Choice);
+}
 
-	Withdraw(GlobalClient, Choice);
 
-	vClient = SaveDataToFile(vClient, ClientFile, GlobalClient);
+int ReadWithdrawAmount()
+{
+	int Amount = 0;
+
+	std::cout << "Enter an amount multuple of 5's: ";
+	std::cin >> Amount;
+	while (std::cin.fail() || (Amount % 5 !=0))
+	{
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Invalid Amount, ";
+		std::cout << "Enter an amount multuple of 5's: ";
+		std::cin >> Amount;
+	}
+	return Amount;
+}
+
+void PerformNormalWithdraw()
+{
+	int Amount = ReadWithdrawAmount();
+
+	char Answer = 'n';
+	if (GlobalClient.Balance < Amount)
+	{
+		std::cout << "\nInsufficient balance for this transaction.\n";
+		return;
+	}
+
+	std::cout << "Are you sure you want to perform this transaction (Y/N): ";
+	std::cin >> Answer;
+	std::vector <stClients> vClients = LoadDataFromFile();
+	if (Answer == 'y' || Answer == 'Y')
+	{
+		GlobalClient.Balance -= Amount;
+		SaveDataToFile(vClients);
+		std::cout << "Done Successfully, New balance is: " << GlobalClient.Balance << std::endl;
+	} 
+}
+
+void ShowNormalWithdrawMenu()
+{
+	ShowHeaderScreen("Normal Withdraw");
+	PerformNormalWithdraw();
+}
+
+void ShowBalanceMenu()
+{
+	ShowHeaderScreen("Balance");
+
+	std::cout << "Your Balance is: " << GlobalClient.Balance << "\n\n";
+ 
+}
+
+int ReadDepositAmount()
+{
+	int DepositAmount = 0;
+	std::cout << "Enter a Deposit amount: ";
+	std::cin >> DepositAmount;
+	while (std::cin.fail() || (DepositAmount <= 0))
+	{
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Invalid Amount, ";
+		std::cout << "Please enter a valid Deposit Amount: ";
+		std::cin >> DepositAmount;
+	}
+
+	return DepositAmount;
+}
+
+void PerformDeposit()
+{
+	int Amount = ReadDepositAmount();
+
+	char Answer = 'y';
+
+	std::cout << "Are you sure you want to perform this transaction (Y/N): ";
+	std::cin >> Answer;
+	std::vector <stClients> vClients = LoadDataFromFile();
+	if (Answer == 'y' || Answer == 'Y')
+	{
+		GlobalClient.Balance += Amount;
+		SaveDataToFile(vClients);
+		std::cout << "\n\nDone Successfully, New balance is: " << GlobalClient.Balance << std::endl;
+	}
+}
+
+void ShowDepositMenu()
+{
+	ShowHeaderScreen("Deposit Menu");
+
+	PerformDeposit();
 }
 
 void ATM_MainMenu()
 {
-    while (true)
-    {
+	
+	enMenuOptions Menu;
+   do {
         ATM_MenuScreen();
-        enMenuOptions Menu = ReadOptions();
+         Menu = ReadOptions();
 
         switch (Menu)
         {
         case enMenuOptions::eQuickWithdraw:
-            QuickWithdrawMainMenu();
+            ShowQuickWithdrawMenu();
+			system("pause");
             break;
-        // Add other cases as needed
-        case enMenuOptions::eLogout:
-            return; // Exit the menu loop
+		case enMenuOptions::eNormalWithdraw:
+			ShowNormalWithdrawMenu();
+			system("pause");
+			break;
+		case enMenuOptions::eDeposit:
+			ShowDepositMenu();
+			system("pause");
+			break;
+		case enMenuOptions::eCheckBalance:
+			ShowBalanceMenu();
+			system("pause");
+			break;
         }
-    }
+   } while (Menu != enMenuOptions::eLogout);
+   LoginScreen();
+
 }
 
 int main()
 {
-	std::vector <stClients> vClient = LoadDataFromFile();
-	LoginScreen(vClient);
-	ATM_MainMenu();
-
+	
+	LoginScreen();
 	return 0;
 }
