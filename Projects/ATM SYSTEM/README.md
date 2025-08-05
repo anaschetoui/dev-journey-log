@@ -7,7 +7,13 @@ A simple C++14 console-based ATM simulation. Users can log in with an account nu
 - Deposit
 - Check Balance
 - Logout
+---
 
+
+https://github.com/user-attachments/assets/d8742a31-25b0-4eec-ad61-b8c3f83c9fc1
+
+
+---
 ## Features
 
 - User authentication with account number and 4-digit PIN
