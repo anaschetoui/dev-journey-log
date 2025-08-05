@@ -8,6 +8,7 @@ const std::string ClientFile = "ClientFile.txt";
 
 void ATM_MainMenu();
 
+// Structure to hold client information
 struct stClients
 {
 	std::string AccountNumber;
@@ -17,14 +18,17 @@ struct stClients
 	double Balance = 0.00;
 };
 
+// Global variable to store the currently logged-in client
 stClients GlobalClient;
 
+// Enum for ATM menu options
 enum enMenuOptions
 {
 	eQuickWithdraw = 1, eNormalWithdraw=2,eDeposit=3,
 	eCheckBalance = 4, eLogout=5
 };
 
+// Displays a header with a custom message
 void ShowHeaderScreen(std::string Message,short N=30)
 {
 	system("CLS");
@@ -33,6 +37,7 @@ void ShowHeaderScreen(std::string Message,short N=30)
 	std::cout << std::string(30, '=') << "\n";
 }
 
+// Reads account number from user input
 std::string ReadAccountNumber(std::string Message= "Enter Account Number: ")
 {
 	std::string AccountNumber;
@@ -41,9 +46,9 @@ std::string ReadAccountNumber(std::string Message= "Enter Account Number: ")
 	getline(std::cin>>std::ws,AccountNumber);
 
 	return AccountNumber;
-		
 }
 
+// Reads a 4-digit PIN code from user input
 std::string ReadPINCode(std::string Message = "Enter PIN Code: ")
 {
 	int PIN = 0;
@@ -51,7 +56,8 @@ std::string ReadPINCode(std::string Message = "Enter PIN Code: ")
 	std::cout << Message;
 	std::cin >> PIN;
 
-	while (std::cin.fail() || std::to_string(PIN).size() != 4) //this because I want user to put pin code from 4 digits & only digits
+	// Validate PIN: must be 4 digits and numeric
+	while (std::cin.fail() || std::to_string(PIN).size() != 4)
 	{
 		std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -63,6 +69,7 @@ std::string ReadPINCode(std::string Message = "Enter PIN Code: ")
 	return std::to_string(PIN);
 }
 
+// Splits a string into a vector using a separator
 std::vector <std::string> vSplitString(std::string Line, std::string Seperator = "#//#")
 {
 	std::vector <std::string> vSplit;
@@ -84,12 +91,12 @@ std::vector <std::string> vSplitString(std::string Line, std::string Seperator =
 	return vSplit;
 }
 
+// Converts a vector of strings to a stClients record
 stClients ConvertLineToRecord(std::vector<std::string> vSplit)
 {
     stClients Client;
     if (vSplit.size() < 5) {
-        // Handle error: not enough fields
-        // You could throw, return a default, or log an error
+        // Not enough fields, return default client
         return Client;
     }
 
@@ -99,13 +106,16 @@ stClients ConvertLineToRecord(std::vector<std::string> vSplit)
     Client.Phone = vSplit[3];
     try {
         Client.Balance = std::stod(vSplit[4]);
-    } catch (...) {
-        Client.Balance = 0.0; // or handle error as needed
+    }
+	catch (...) 
+	{
+        Client.Balance = 0.0; // If conversion fails, set balance to 0
     }
 
     return Client;
 }
 
+// Loads all clients from the file into a vector
 std::vector <stClients> LoadDataFromFile(std::string Filename = ClientFile)
 {
 	std::fstream MyFile;
@@ -128,6 +138,7 @@ std::vector <stClients> LoadDataFromFile(std::string Filename = ClientFile)
 	return vClient;
 }
 
+// Checks if a client with the given account number and PIN exists
 bool IsClientWithAccountNumberAndPINExist(std::string AccountNumber,std::string PIN,stClients &Client, std::vector <stClients> vClient)
 {
 	for (stClients &C : vClient)
@@ -142,6 +153,7 @@ bool IsClientWithAccountNumberAndPINExist(std::string AccountNumber,std::string 
 	return false;
 }
 
+// Converts a client record to a line for file storage
 std::string ConvertRecordToLine(stClients Client, std::string Seperator = "#//#")
 {
 	return Client.AccountNumber + Seperator +
@@ -151,6 +163,7 @@ std::string ConvertRecordToLine(stClients Client, std::string Seperator = "#//#"
 		std::to_string(Client.Balance);
 }
 
+// Saves all clients to the file, updating the current client if needed
 std::vector <stClients> SaveDataToFile(std::vector <stClients> vClients, std::string Filename=ClientFile )
 {
     std::fstream MyFile;
@@ -178,7 +191,7 @@ std::vector <stClients> SaveDataToFile(std::vector <stClients> vClients, std::st
 	return vClients;
 }
 
-
+// Handles the login screen and authentication loop
 void LoginScreen()
 {
 	std::vector <stClients> vClient = LoadDataFromFile();
@@ -200,6 +213,7 @@ void LoginScreen()
 	
 }
 
+// Displays the main ATM menu
 void ATM_MenuScreen()
 {
 	ShowHeaderScreen("ATM MAIN MENU");
@@ -213,6 +227,7 @@ void ATM_MenuScreen()
 
 }
 
+// Reads the user's menu option choice
 enMenuOptions ReadOptions(std::string Message = "Choose an option [1 to 5]: ")
 {
 	short MenuOption = 0;
@@ -232,7 +247,7 @@ enMenuOptions ReadOptions(std::string Message = "Choose an option [1 to 5]: ")
 	return enMenuOptions(MenuOption);
 }
 
-
+// Displays the quick withdraw menu
 void QuickWithdrawMenuScreen()
 {
 	ShowHeaderScreen("Quick Withdraw");
@@ -247,6 +262,7 @@ void QuickWithdrawMenuScreen()
 
 }
 
+// Reads the user's quick withdraw choice
 short ReadChoices(std::string Message = "Choose from [1 to 8]:  ")
 {
 
@@ -265,6 +281,7 @@ short ReadChoices(std::string Message = "Choose from [1 to 8]:  ")
 	return Choice;
 }
 
+// Returns the withdraw amount based on the user's choice
 short GetQuickWithdrawAmount(short Choice)
 {
 	short arr[8] = { 20,50,100,200,400,600,800,1000 };
@@ -272,6 +289,7 @@ short GetQuickWithdrawAmount(short Choice)
 	return arr[Choice - 1];
 }
 
+// Performs the quick withdraw operation
 void PerformWithdraw(short Choice)
 {
 	char Answer = 'n';
@@ -301,6 +319,7 @@ void PerformWithdraw(short Choice)
 		}
 }
 
+// Shows the quick withdraw menu and processes the user's choice
 void ShowQuickWithdrawMenu()
 {	
 	QuickWithdrawMenuScreen();
@@ -310,7 +329,7 @@ void ShowQuickWithdrawMenu()
 	PerformWithdraw(Choice);
 }
 
-
+// Reads a custom withdraw amount (must be a multiple of 5)
 int ReadWithdrawAmount()
 {
 	int Amount = 0;
@@ -328,6 +347,7 @@ int ReadWithdrawAmount()
 	return Amount;
 }
 
+// Performs a normal (custom) withdraw operation
 void PerformNormalWithdraw()
 {
 	int Amount = ReadWithdrawAmount();
@@ -350,12 +370,14 @@ void PerformNormalWithdraw()
 	} 
 }
 
+// Shows the normal withdraw menu
 void ShowNormalWithdrawMenu()
 {
 	ShowHeaderScreen("Normal Withdraw");
 	PerformNormalWithdraw();
 }
 
+// Shows the balance menu
 void ShowBalanceMenu()
 {
 	ShowHeaderScreen("Balance");
@@ -364,6 +386,7 @@ void ShowBalanceMenu()
  
 }
 
+// Reads a deposit amount from the user
 int ReadDepositAmount()
 {
 	int DepositAmount = 0;
@@ -381,6 +404,7 @@ int ReadDepositAmount()
 	return DepositAmount;
 }
 
+// Performs a deposit operation
 void PerformDeposit()
 {
 	int Amount = ReadDepositAmount();
@@ -398,6 +422,7 @@ void PerformDeposit()
 	}
 }
 
+// Shows the deposit menu
 void ShowDepositMenu()
 {
 	ShowHeaderScreen("Deposit Menu");
@@ -405,6 +430,7 @@ void ShowDepositMenu()
 	PerformDeposit();
 }
 
+// Main ATM menu loop
 void ATM_MainMenu()
 {
 	
@@ -439,7 +465,6 @@ void ATM_MainMenu()
 
 int main()
 {
-	
 	LoginScreen();
 	return 0;
 }
