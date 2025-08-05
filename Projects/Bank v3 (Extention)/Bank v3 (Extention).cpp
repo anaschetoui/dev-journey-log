@@ -1164,11 +1164,11 @@ bool MarkUserFlag(std::vector <stUser>& vUser, std::string Username)
 stUser ReadPermissions(stUser User)
 {
 	char GiveAccess = 'n';
-	std::cout << "Do you want to giv this user full access: (Y/N): ";
+	std::cout << "Do you want to give this user full access: (Y/N): ";
 	std::cin >> GiveAccess;
 
 	// Full access shortcut
-	if (GiveAccess == 'Y') {
+	if (toupper(GiveAccess) == 'Y') {
 		User.Permisions = ALLPERMISSIONS;
 		std::cout << "\nFull access granted to this user.\n";
 	}
@@ -1182,14 +1182,14 @@ stUser ReadPermissions(stUser User)
 		std::cout << "Grant 'Show Client List' access? (Y/N): ";
 		std::cin >> GiveAccess;
 		GiveAccess = toupper(GiveAccess);
-		if (GiveAccess == 'Y')
+		if (GiveAccess == 'Y' || GiveAccess == 'y')
 			User.Permisions |= READ_SHOW_CLIENT;
 
 		// Add Client permission
 		std::cout << "Grant 'Add New Client' access? (Y/N): ";
 		std::cin >> GiveAccess;
 		GiveAccess = toupper(GiveAccess);
-		if (GiveAccess == 'Y')
+		if (GiveAccess == 'Y' || GiveAccess == 'y')
 			User.Permisions |= ADD_NEW_CLIENT;
 
 		// Delete Client permission
