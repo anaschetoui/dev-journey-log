@@ -16,9 +16,9 @@ This repository documents every step I take from solving algorithms in C++ to bu
 | 05 | ~~Algorithms Level 2~~ | ✅ Completed |
 | 06 | ~~C++ Level 2~~ | ✅ Completed |
 | 07 | ~~Algorithms Level 3~~ | ✅ Completed |
-| 08 | Algorithms Level 4 | 🔄 In Progress |
+| 08 | ~~Algorithms Level 4~~ | ✅ Completed |
 | 09 | ~~Foundations Level 2~~ | ✅ Completed |
-| 10 | OOP Level 1 | ⏳ Soon |
+| 10 | OOP Level 1 | 🔄 In Progress |
 | 11 | OOP Level 2 | ⏳ Soon |
 | 12 | Data Structures Level 1 | ⏳ Planned |
 | 13 | Algorithms Level 5 | ⏳ Planned |
