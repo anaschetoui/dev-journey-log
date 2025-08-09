@@ -1,7 +1,21 @@
 ﻿<div style="text-align: left;">
 <strong>Language:</strong>
-<a href="?lang=ar" style="margin-right:10px;">العربية</a>
-<a href="?lang=en">English</a>
+<a href="#" onclick="switchLang('ar'); return false;" style="margin-right:10px;">العربية</a>
+<a href="#" onclick="switchLang('en'); return false;">English</a>
+
+<script>
+  function switchLang(lang) {
+    document.getElementById('arabic-content').style.display = lang === 'ar' ? 'block' : 'none';
+    document.getElementById('english-content').style.display = lang === 'en' ? 'block' : 'none';
+    // Optionally update the URL without reloading
+    window.history.replaceState(null, '', '?lang=' + lang);
+  }
+
+  // Initial load
+  const urlParams = new URLSearchParams(window.location.search);
+  const lang = urlParams.get('lang') || 'ar';
+  switchLang(lang);
+</script>
 </div>
 
 <!-- بداية المحتوى العربي -->
@@ -125,9 +139,15 @@ One of the biggest drawbacks of procedural programming is that any part of the c
 </div>
 
 <script>
-  // Simple language switcher
+  function switchLang(lang) {
+    document.getElementById('arabic-content').style.display = lang === 'ar' ? 'block' : 'none';
+    document.getElementById('english-content').style.display = lang === 'en' ? 'block' : 'none';
+    // Optionally update the URL without reloading
+    window.history.replaceState(null, '', '?lang=' + lang);
+  }
+
+  // Initial load
   const urlParams = new URLSearchParams(window.location.search);
   const lang = urlParams.get('lang') || 'ar';
-  document.getElementById('arabic-content').style.display = lang === 'ar' ? 'block' : 'none';
-  document.getElementById('english-content').style.display = lang === 'en' ? 'block' : 'none';
+  switchLang(lang);
 </script>
