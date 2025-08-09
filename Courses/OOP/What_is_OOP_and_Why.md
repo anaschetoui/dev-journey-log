@@ -1,5 +1,4 @@
-﻿</script><div style="text-align: left;">
-<strong>Language:</strong>
+﻿<strong>Language:</strong>
 <a href="#" onclick="switchLang('ar'); return false;" style="margin-right:10px;">العربية</a>
 <a href="#" onclick="switchLang('en'); return false;">English</a>
 </div>
@@ -122,16 +121,3 @@ This way, all functions related to students are under the "Student" umbrella and
 
 One of the biggest drawbacks of procedural programming is that any part of the code can call any function and manipulate data directly, weakening code security. In contrast, OOP gives you the ability to protect code by preventing some methods from being called from outside the class, providing a strong protection layer and many other advantages.
 
-</div>
-
-<script>
-  function switchLang(lang) {
-    document.getElementById('arabic-content').style.display = lang === 'ar' ? 'block' : 'none';
-    document.getElementById('english-content').style.display = lang === 'en' ? 'block' : 'none';
-    window.history.replaceState(null, '', '?lang=' + lang);
-  }
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const lang = urlParams.get('lang') || 'ar';
-  switchLang(lang);
-</script>
