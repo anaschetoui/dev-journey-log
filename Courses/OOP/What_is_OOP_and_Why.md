@@ -1,21 +1,7 @@
-﻿<div style="text-align: left;">
+﻿</script><div style="text-align: left;">
 <strong>Language:</strong>
 <a href="#" onclick="switchLang('ar'); return false;" style="margin-right:10px;">العربية</a>
 <a href="#" onclick="switchLang('en'); return false;">English</a>
-
-<script>
-  function switchLang(lang) {
-    document.getElementById('arabic-content').style.display = lang === 'ar' ? 'block' : 'none';
-    document.getElementById('english-content').style.display = lang === 'en' ? 'block' : 'none';
-    // Optionally update the URL without reloading
-    window.history.replaceState(null, '', '?lang=' + lang);
-  }
-
-  // Initial load
-  const urlParams = new URLSearchParams(window.location.search);
-  const lang = urlParams.get('lang') || 'ar';
-  switchLang(lang);
-</script>
 </div>
 
 <!-- بداية المحتوى العربي -->
@@ -64,7 +50,7 @@
 
 * <strong>الكائن (Object):</strong> هو تمثيل لشيء معين، مثل "طالب" واحد.
 * <strong>الخصائص (Properties):</strong> هي البيانات التي تصف الكائن، مثل اسم الطالب وبريده الإلكتروني (<code>Student1.Name</code>, <code>Student1.Email</code>).
-* <strong>التوابع (Methods):</strong> هي الوظائف التي يمكن للكائن القيام بها، وفي البرمجة الشيئية يُطلق على الوظيفة اسم "Method". مثل حساب المعدل أو إرسال بريد إلكتروني (<code>Student1.CalcuateAverage()</code>, <code>Student1.SendEmail()</code>).
+* <strong>التوابع (Methods):</strong> هي الوظائف التي يمكن للكائن القيام بها، وفي البرمجة الشيئية يُطلق على الوظيفة اسم "Method". مثل حساب المعدل أو إرسال بريد إلكتروني (<code>Student1.CalculateAverage()</code>, <code>Student1.SendEmail()</code>).
 
 بهذه الطريقة، تكون جميع الوظائف المتعلقة بالطلاب موجودة تحت مظلة "الطالب"، ولا يمكن أن تتداخل مع وظائف "الموظف" مثلًا. هذا يمنحنا:
 
@@ -124,7 +110,7 @@ The main advantage here is that each "object" becomes a container or umbrella fo
 
 * <strong>Object:</strong> Represents a specific thing, like a single student.
 * <strong>Properties:</strong> The data that describes the object, such as the student's name and email (<code>Student1.Name</code>, <code>Student1.Email</code>).
-* <strong>Methods:</strong> The functions the object can perform. In OOP, a function is called a "Method", such as calculating the average or sending an email (<code>Student1.CalcuateAverage()</code>, <code>Student1.SendEmail()</code>).
+* <strong>Methods:</strong> The functions the object can perform. In OOP, a function is called a "Method", such as calculating the average or sending an email (<code>Student1.CalculateAverage()</code>, <code>Student1.SendEmail()</code>).
 
 This way, all functions related to students are under the "Student" umbrella and cannot interfere with "Employee" functions, for example. This gives us:
 
@@ -142,11 +128,9 @@ One of the biggest drawbacks of procedural programming is that any part of the c
   function switchLang(lang) {
     document.getElementById('arabic-content').style.display = lang === 'ar' ? 'block' : 'none';
     document.getElementById('english-content').style.display = lang === 'en' ? 'block' : 'none';
-    // Optionally update the URL without reloading
     window.history.replaceState(null, '', '?lang=' + lang);
   }
 
-  // Initial load
   const urlParams = new URLSearchParams(window.location.search);
   const lang = urlParams.get('lang') || 'ar';
   switchLang(lang);
