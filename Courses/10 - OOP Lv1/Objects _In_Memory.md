@@ -1,0 +1,149 @@
+[English ↙](#english)
+
+<a id="arabic"></a>
+<div dir="rtl" style="text-align:right">
+
+# Objects In Memory
+
+- يمكن إنشاء عدة كائنات (Objects) من نفس الـClass لأنه نوع بيانات (Data Type).
+- لكل كائن مساحة مستقلة في الذاكرة لخصائصه (Data Members).
+- الدوال الأعضاء (Member Functions/Methods) تعريف واحد مشترك بين كل الكائنات، وتعمل على بيانات الكائن الذي يستدعيها.
+
+---
+
+## 1) الفكرة العامة
+- بما أن الـClass نوع بيانات، نستطيع تعريف Person1 وPerson2 و… تمامًا كما نعرّف int x, y.
+- عند إنشاء كائن جديد، تُحجز له مساحة مستقلة لبياناته فقط (Data Members).
+- أمّا الدوال الأعضاء فتكون مشتركة في التعريف بين جميع الكائنات لتجنّب تكرارها في الذاكرة.
+
+## 2) مثال مبسّط
+- Class: clsPerson
+- Data Members: FirstName, LastName
+- Method: FullName() تُرجع الاسم الكامل بدمج FirstName و LastName.
+
+</div>
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class clsPerson {
+public:
+    string FirstName;
+    string LastName;
+
+    string FullName() {
+        return FirstName + " " + LastName;
+    }
+};
+
+int main() {
+    clsPerson Person1, Person2;
+
+    Person1.FirstName = "Mohammed";
+    Person1.LastName  = "Abu-Hadhoud";
+
+    Person2.FirstName = "Anas";
+    Person2.LastName  = "Chetoui";
+
+    cout << "Person1: " << Person1.FullName() << endl; // Mohammed Abu-Hadhoud
+    cout << "Person2: " << Person2.FullName() << endl; // Anas Chetoui
+    return 0;
+}
+```
+
+<div dir="rtl" style="text-align: right">
+
+## 3) تمثيل المفهوم 
+يوضح الجدولان التاليان الفكرة التي بالصورة: ما الذي يُخزَّن لكل كائن، وما الذي يكون مشتركًا.
+
+### 3.1) ما هو مشترك وما هو مستقل
+| العنصر | النطاق | أين يوجد في الذاكرة | الخلاصة |
+|---|---|---|---|
+| Data Members (مثل FirstName, LastName) | لكل كائن نسخة مستقلة | داخل كل Object | بيانات كل كائن منفصلة عن الآخر |
+| Member Functions (مثل FullName) | تعريف واحد مشترك | على مستوى الـClass | الدوال لا تتكرر لكل كائن؛ تُنفّذ على بيانات المستدعي |
+
+### 3.2) قيم مثال clsPerson
+| الكائن | FirstName | LastName | ناتج FullName() |
+|---|---|---|---|
+| Person1 | Mohammed | Abu-Hadhoud | Mohammed Abu-Hadhoud |
+| Person2 | Anas | Chetoui | Anas Chetoui |
+
+## 4) نقاط ختامية
+- تغيير بيانات Person1 لا يؤثر على Person2 والعكس صحيح.
+- الدوال الأعضاء ترى كل متغيرات الكلاس (سواء كانت public أو private) عند التنفيذ داخل الكلاس.
+- خلاصة: البيانات منفصلة لكل Object، والدوال مشتركة في التعريف وتُنفَّذ على بيانات الكائن المستدعي.
+
+
+</div>
+
+<br><br><br>
+
+[العربية ↗](#arabic)
+<a id="english"></a>
+
+# Objects In Memory
+
+- You can create multiple objects from the same class because a class is a data type.
+- Each object gets its own memory space for its data members.
+- Member functions/methods have a single shared definition and operate on the data of the calling object.
+
+---
+
+## 1) Core idea
+- Since a class is a data type, you can define Person1, Person2, … just like int x, y.
+- Creating a new object allocates separate memory for its data members only.
+- Member functions are not duplicated per object; they are shared in definition and invoked on each object’s data.
+
+## 2) Minimal example
+- Class: clsPerson
+- Data Members: FirstName, LastName
+- Method: FullName() returns the concatenated full name.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class clsPerson {
+public:
+    string FirstName;
+    string LastName;
+
+    string FullName() {
+        return FirstName + " " + LastName;
+    }
+};
+
+int main() {
+    clsPerson Person1, Person2;
+
+    Person1.FirstName = "Mohammed";
+    Person1.LastName  = "Abu-Hadhoud";
+
+    Person2.FirstName = "Anas";
+    Person2.LastName  = "Chetoui";
+
+    cout << "Person1: " << Person1.FullName() << endl; // Mohammed Abu-Hadhoud
+    cout << "Person2: " << Person2.FullName() << endl; // Anas Chetoui
+    return 0;
+}
+```
+
+## 3) Explain The Concept
+
+### 3.1) Shared vs per-object
+| Item | Scope | Where it lives | Summary |
+|---|---|---|---|
+| Data Members (e.g., FirstName, LastName) | Per object (separate copy) | Inside each object | Each object’s data is independent |
+| Member Functions (e.g., FullName) | Shared definition | At class level | Not duplicated per object; executes on caller’s data |
+
+### 3.2) Example values
+| Object | FirstName | LastName | FullName() |
+|---|---|---|---|
+| Person1 | Mohammed | Abu-Hadhoud | Mohammed Abu-Hadhoud |
+| Person2 | Anas | Chetoui | Anas Chetoui |
+
+## 4) Key takeaways
+- Updating Person1’s data does not affect Person2.
+- Member functions can access all class variables internally (public or private).
+- Bottom line: data is per object; functions are shared in definition and run on the caller’s data.
