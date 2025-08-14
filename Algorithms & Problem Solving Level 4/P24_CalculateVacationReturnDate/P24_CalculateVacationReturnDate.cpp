@@ -5,8 +5,7 @@ Write a program to read Vacation Start DateFrom and VacationDays, then make a fu
 */
 #include <iostream>
 #include <string>
-#include "..\..\MyLib\DateUtils.h"
-
+#include "../../MyLib/FP/DateUtils.h"
 int main()
 {
 	

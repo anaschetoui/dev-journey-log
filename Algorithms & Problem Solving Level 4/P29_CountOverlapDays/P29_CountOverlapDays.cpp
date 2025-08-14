@@ -4,7 +4,7 @@ Write a program to read a tow periods then count overlap days?
 */
 
 #include <iostream>
-#include "../../../MyLib/DateUtils.h"
+#include "../../MyLib/FP/DateUtils.h"
 
 short CountOverlapDay(stPeriod Period1, stPeriod Period2)
 {

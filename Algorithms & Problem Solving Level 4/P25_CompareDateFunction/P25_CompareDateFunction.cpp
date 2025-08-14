@@ -5,8 +5,7 @@ Write a program to read Date1 & Date2, and write a function to compare dates, it
 */
 
 #include <iostream>
-#include "../../../MyLib/DateUtils.h"
-
+#include "../../MyLib/FP/DateUtils.h"
 enum enMyCompareDate
 {
     Before = -1, Equal = 0, After =1

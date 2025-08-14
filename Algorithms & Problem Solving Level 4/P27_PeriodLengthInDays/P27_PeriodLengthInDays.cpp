@@ -4,7 +4,7 @@ Write a program to read a Period and calculate period length in days?
 */
 
 #include <iostream>
-#include "../../../MyLib/DateUtils.h" 
+#include "../../MyLib/FP/DateUtils.h"
 
 short PeriodLengthInDays(stPeriod Period1, bool IncludeEndDay=false)
 {
