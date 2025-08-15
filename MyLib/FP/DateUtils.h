@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ctime>
 #include <string>
 #include <iostream>
 #include <limits>
@@ -567,3 +568,16 @@ inline stDate ConvertDateStringToDate(std::vector<short> vDate)
     return Date;
 }
 
+
+
+// Gets the current system date and returns it as stDate
+ stDate GetSystemDate()
+{
+    std::time_t t = std::time(nullptr);
+    std::tm* now = std::localtime(&t);
+    stDate date;
+    date.Day = static_cast<short>(now->tm_mday);
+    date.Month = static_cast<short>(now->tm_mon + 1);
+    date.Year = static_cast<short>(now->tm_year + 1900);
+    return date;
+}
