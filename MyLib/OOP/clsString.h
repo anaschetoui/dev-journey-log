@@ -74,7 +74,7 @@ public:
 
 	}
 
-	_strValue UpperFirstLetter()
+	void UpperFirstLetter()
 	{
 		_strValue= UpperFirstLetter(_strValue);
 	}
@@ -95,7 +95,7 @@ public:
 		return str;
 	}
 
-	_strValue LowerFirsLetter()
+	void LowerFirsLetter()
 	{
 		_strValue = LowerFirsLetter(_strValue);
 	}
@@ -175,7 +175,7 @@ public:
 
 	void CountCapitalLetter()
 	{
-		_strValue = CountCapitalLetter(_strValue);
+		_strValue = std::to_string(CountCapitalLetter(_strValue));
 	}
 
 	static short CountSmallLetter(std::string str)
@@ -195,7 +195,7 @@ public:
 
 	void CountSmallLetter()
 	{
-		_strValue = CountSmallLetter(_strValue);
+		_strValue = std::to_string(CountSmallLetter(_strValue));
 	}
 
 	static short CountLetterInString(std::string str, char y)
@@ -246,13 +246,14 @@ public:
 
 	void CountAllVowel()
 	{
-		_strValue = CountAllVowel(_strValue);
+		_strValue = std::to_string(CountAllVowel(_strValue));
+
 	}
 
 	static short CountEachWord(std::string str)
 	{
 		std::string delim = " ";
-		short pos = 0;
+		size_t pos = 0;
 		short count = 0;
 
 		std::string word = "";
@@ -284,7 +285,7 @@ public:
 
 	static std::vector<std::string> SplitString(std::string str, std::string Seperator)
 	{
-		short pos = 0;
+		size_t pos = 0;
 		std::string word = "";
 		std::vector<std::string> vSplit;
 		while ((pos = str.find(Seperator)) != std::string::npos) {
@@ -319,17 +320,18 @@ public:
 		_strValue = TrimLeft(_strValue);
 	}
 
-	static std::string TrimRight(std::string str)
-	{
-		for (short i = str.length(); i >= 0; i--)
-		{
-			if (str[i] != ' ')
-			{
-				return str.substr(0, i + 1);
-			}
-		}
-		return "";
-	}
+    static std::string TrimRight(std::string str)
+    {
+        if (str.empty())
+            return "";
+
+        size_t i = str.length();
+        while (i > 0 && str[i - 1] == ' ')
+        {
+            --i;
+        }
+        return str.substr(0, i);
+    }
 
 
 	void TrimRight()
@@ -401,7 +403,7 @@ public:
 
 	static std::string ReplaceWord(std::string S1, std::string Replacefrom, std::string Replaceto)
 	{
-		short pos = S1.find(Replacefrom);
+		size_t pos = S1.find(Replacefrom);
 
 		while (pos != std::string::npos)
 		{
