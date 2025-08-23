@@ -3,6 +3,11 @@
 Welcome to my personal journey as a self-taught developer.  
 This repository documents every step I take from solving algorithms in C++ to building full backend applications in C# and SQL.
 
+## 📅 Repository Information
+
+**Created:** July 22, 2025  
+This repository was established to track my programming journey from the very beginning.
+
 ---
 ## 🗺️ My Learning Roadmap
 
