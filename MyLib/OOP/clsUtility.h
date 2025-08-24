@@ -2,4 +2,7 @@
 #include <iostream>
 #include <vector>
 
+class clsUtility
+{
 
+};
