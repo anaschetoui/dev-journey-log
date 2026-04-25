@@ -48,10 +48,59 @@ struct stClient {
 	double Balance = 0.00;
 };
 
+void PrintClientCard(stClient Client)
+{
+	cout << "Account Number: " << Client.AccountNumber << endl;
+	cout << "PIN Code      : " << Client.PINCode << "\n";
+	cout << "Name          : " << Client.Name << "\n";
+	cout << "Phone         : " << Client.Phone << "\n";
+	cout << "Balance       : " << Client.Balance << endl;
+	 
+}
+
+stClient ReadCleint()
+{
+	stClient Client;
+
+	cout << "Enter PIN Code : ";
+	cin >> Client.PINCode;
+
+	cout << "Enter Name     : ";
+	cin >> Client.Name;
+
+	cout << "Enter Phone    : ";
+	cin >> Client.Balance;
+
+	cout << "Enter Balance  : ";
+	cin >> Client.Balance;
+
+	return Client;
+}
+
+const string Filename = "Clients.txt";
+
+vector <string> vSplit(string Str, string Seperator)
+{
+	vector <string> vString;
+	string sWord = "";
+	size_t pos = 0;
+
+	while ((pos = Str.find(Seperator)) != string::npos)
+	{
+		sWord = 
+	}
+}
 
 int main() {
 	
-	ReadAccountNumber();
+	stClient Client;
+	Client.AccountNumber = "AN1234";
+	Client.PINCode = "1234";
+	Client.Name = "Anas";
+	Client.Phone = "156627565";
+	Client.Balance = 837678;
+
+	PrintClientCard(Client);
 	
 	return 0;
 }
