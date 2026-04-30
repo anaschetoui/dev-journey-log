@@ -1,5 +1,5 @@
 /*
-P13 - Compare Two Dates
+P13 - Date1 Before Date 2
 
 Write a program to read two dates and check if Date1 is less than Date2.
 
