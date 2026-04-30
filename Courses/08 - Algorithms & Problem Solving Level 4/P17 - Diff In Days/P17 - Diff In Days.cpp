@@ -154,7 +154,7 @@ stDate ReadDate()
 	return Date;
 }
 
-bool IsDate1LessThanDate2(stDate Date1, stDate Date2)
+bool IsDate1BeforeDate2(stDate Date1, stDate Date2)
 {
 	if (Date1.Year < Date2.Year)
 		return true;
@@ -202,7 +202,7 @@ int GetDiffrenceInDays(stDate Date1, stDate Date2, bool IncludeDay=false)
 {
 	int Days = 0;
 
-	while (IsDate1LessThanDate2(Date1, Date2))
+	while (IsDate1BeforeDate2(Date1, Date2))
 	{
 		Days++;
 		Date1 = IncreaseDateByOneDay(Date1);
