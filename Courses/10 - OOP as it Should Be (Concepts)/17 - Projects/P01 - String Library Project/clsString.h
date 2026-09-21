@@ -397,6 +397,23 @@ public:
 		return ReplaceWords(_Value, WordToReplace, ReplaceTo, MatchCase);
 	}
 
+	static string ReplaceString(string Str, string  WordToReplace, string ReplaceTo)
+	{
+		size_t Position = Str.find(WordToReplace);
+
+		while (Position != string::npos)
+		{
+			Str.replace(Position, WordToReplace.length(), ReplaceTo);
+			Position = Str.find(WordToReplace, Position + ReplaceTo.length());
+		}
+
+		return Str;
+	}
+
+	string ReplaceString(string  WordToReplace, string ReplaceTo)
+	{
+		return ReplaceString(_Value, WordToReplace, ReplaceTo);
+	}
 
 	static string RemovePunctuations(string str)
 	{
